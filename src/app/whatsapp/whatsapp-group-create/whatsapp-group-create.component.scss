@@ -1,0 +1,351 @@
+.whatsapp-group-create-layout {
+  display: flex;
+  min-height: 100vh;
+}
+
+.main-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.create-group-page {
+  background: #f7f9fa;
+  min-height: 100vh;
+  padding: 2.5rem 0 0 0;
+}
+
+.page-header {
+  max-width: 900px;
+  margin: 0 auto 2rem auto;
+  padding: 0 2rem;
+  .breadcrumb {
+    color: #7b8794;
+    font-size: 1.05rem;
+    margin-bottom: 0.5rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    .breadcrumb-sep {
+      color: #b0b0b0;
+      font-size: 1.2rem;
+    }
+    .breadcrumb-current {
+      color: #222c36;
+      font-weight: 500;
+    }
+  }
+  h1 {
+    font-size: 2rem;
+    font-weight: 700;
+    color: #222c36;
+    margin: 0;
+  }
+}
+
+.form-card {
+  background: #fff;
+  border-radius: 20px;
+  box-shadow: 0 2px 16px 0 rgba(0,0,0,0.06);
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 2.5rem 2rem 2rem 2rem;
+}
+
+form {
+  display: flex;
+  flex-direction: column;
+  gap: 2.5rem;
+}
+
+// Form Sections
+.form-section {
+  h3 {
+    font-size: 1.3rem;
+    font-weight: 600;
+    color: #222c36;
+    margin: 0 0 1.5rem 0;
+    padding-bottom: 0.5rem;
+    border-bottom: 2px solid #f0f0f0;
+  }
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.7rem;
+  margin-bottom: 1.5rem;
+
+  label {
+    font-weight: 600;
+    color: #222c36;
+    font-size: 1rem;
+  }
+
+  input[type="text"], 
+  input[type="tel"], 
+  textarea {
+    width: 100%;
+    padding: 1.1rem 1rem;
+    border: 1px solid #e0e0e0;
+    border-radius: 10px;
+    font-size: 1.1rem;
+    background: #fafbfc;
+    transition: border-color 0.2s;
+    resize: none;
+    box-sizing: border-box;
+    
+    &:focus {
+      border-color: #3bbf6c;
+      outline: none;
+      background: #fff;
+    }
+
+    &:disabled {
+      background: #f5f5f5;
+      color: #999;
+      cursor: not-allowed;
+    }
+  }
+
+  textarea {
+    min-height: 100px;
+  }
+}
+
+// Section Header with Add Member Button
+.section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+
+  h3 {
+    margin: 0;
+    border-bottom: none;
+    padding-bottom: 0;
+  }
+
+  .add-member-btn {
+    background: #3bbf6c;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    padding: 0.8rem 1.2rem;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    transition: all 0.2s;
+
+    &:hover:not(:disabled) {
+      background: #2ea55a;
+      transform: translateY(-1px);
+    }
+
+    &:disabled {
+      background: #ccc;
+      cursor: not-allowed;
+    }
+
+    svg {
+      width: 16px;
+      height: 16px;
+    }
+  }
+}
+
+// Members Container
+.members-container {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+// Member Item
+.member-item {
+  background: #f8f9fa;
+  border: 1px solid #e9ecef;
+  border-radius: 12px;
+  padding: 1.5rem;
+  transition: all 0.2s;
+
+  &:hover {
+    border-color: #3bbf6c;
+    box-shadow: 0 2px 8px rgba(59, 191, 108, 0.1);
+  }
+
+  .member-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+    padding-bottom: 0.8rem;
+    border-bottom: 1px solid #e9ecef;
+
+    h4 {
+      font-size: 1.1rem;
+      font-weight: 600;
+      color: #222c36;
+      margin: 0;
+    }
+
+    .remove-member-btn {
+      background: #ff4d4f;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      padding: 0.5rem;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.2s;
+
+      &:hover:not(:disabled) {
+        background: #ff7875;
+        transform: scale(1.05);
+      }
+
+      &:disabled {
+        background: #ccc;
+        cursor: not-allowed;
+      }
+
+      svg {
+        width: 14px;
+        height: 14px;
+      }
+    }
+  }
+
+  .member-fields {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+
+    @media (max-width: 768px) {
+      grid-template-columns: 1fr;
+    }
+  }
+}
+
+// Messages
+.error-message {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: #dc2626;
+  font-size: 0.95rem;
+  padding: 1rem;
+  background: #fee2e2;
+  border-radius: 8px;
+  border: 1px solid #fecaca;
+
+  svg {
+    flex-shrink: 0;
+  }
+}
+
+.success-message {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: #16a34a;
+  font-size: 0.95rem;
+  padding: 1rem;
+  background: #f0fff4;
+  border-radius: 8px;
+  border: 1px solid #d4edda;
+
+  svg {
+    flex-shrink: 0;
+  }
+}
+
+// Form Actions
+.form-actions {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 2rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid #f0f0f0;
+}
+
+.submit-btn {
+  background: #16a34a;
+  color: #fff;
+  border: none;
+  border-radius: 10px;
+  padding: 1rem 2.5rem;
+  font-size: 1.15rem;
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  transition: all 0.2s;
+  box-shadow: 0 2px 8px 0 rgba(22,163,74,0.08);
+
+  &:hover:not(:disabled) {
+    background: #15803d;
+    transform: translateY(-1px);
+  }
+
+  &:disabled {
+    background: #ccc;
+    cursor: not-allowed;
+    transform: none;
+  }
+
+  .spinner {
+    animation: spin 1s linear infinite;
+  }
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+// Responsive Design
+@media (max-width: 768px) {
+  .create-group-page {
+    padding: 1.5rem 0 0 0;
+  }
+
+  .page-header {
+    padding: 0 1rem;
+    
+    h1 {
+      font-size: 1.5rem;
+    }
+  }
+
+  .form-card {
+    margin: 0 1rem;
+    padding: 1.5rem 1rem;
+  }
+
+  .section-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1rem;
+
+    .add-member-btn {
+      align-self: stretch;
+      justify-content: center;
+    }
+  }
+
+  .member-item {
+    padding: 1rem;
+  }
+
+  .submit-btn {
+    width: 100%;
+    justify-content: center;
+  }
+}

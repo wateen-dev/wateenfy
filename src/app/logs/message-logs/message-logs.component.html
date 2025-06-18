@@ -1,0 +1,130 @@
+<div class="message-logs-layout">
+  <!-- Sidebar -->
+  <app-sidebar></app-sidebar>
+
+  <!-- Main Content -->
+  <div class="main-content">
+    <div class="message-logs-page">
+      <div class="page-header">
+        <div class="breadcrumb">
+          <span>Dashboard</span>
+          <span class="breadcrumb-sep">•</span>
+          <span>Message</span>
+          <span class="breadcrumb-sep">•</span>
+          <span class="breadcrumb-current">Logs</span>
+        </div>
+        <h1>Outgoing Message Logs</h1>
+      </div>
+
+      <!-- Loading State -->
+      <div *ngIf="loading" class="loading-state">
+        <div class="loading-spinner"></div>
+        <p>Loading message logs...</p>
+      </div>
+
+      <!-- Error State -->
+      <div *ngIf="error && !loading" class="error-state">
+        <p>{{ error }}</p>
+        <button (click)="loadMessageLogs()" class="retry-btn">Retry</button>
+      </div>
+
+      <!-- Content -->
+      <div *ngIf="!loading && !error" class="form-card">
+        <div class="filters">
+          <div class="filter-item">
+            <label for="startDate">Start date</label>
+            <div class="input-with-icon">
+              <input type="date" id="startDate" [(ngModel)]="startDate" (change)="onDateChange()">
+              <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+            </div>
+          </div>
+          <div class="filter-item">
+            <label for="endDate">End date</label>
+            <div class="input-with-icon">
+              <input type="date" id="endDate" [(ngModel)]="endDate" (change)="onDateChange()">
+              <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+            </div>
+          </div>
+          <div class="filter-item">
+            <label for="statusType">Status Type</label>
+            <div class="select-wrapper">
+              <select id="statusType" [(ngModel)]="statusType" (change)="onStatusTypeChange()">
+                <option value="all">All</option>
+                <option value="sent">Sent</option>
+                <option value="pending">Pending</option>
+                <option value="failed">Failed</option>
+              </select>
+              <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg>
+            </div>
+          </div>
+          <div class="filter-item search-filter">
+            <label for="search"></label>
+            <div class="input-with-icon">
+              <input type="text" id="search" [(ngModel)]="searchTerm" (input)="onSearchChange()" placeholder="Search recipient or message...">
+              <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+            </div>
+          </div>
+          <div class="clear-filter" (click)="clearFilters()">
+            <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M3 6h18"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/><line x1="10" y1="11" x2="10" y2="17"/><line x1="14" y1="11" x2="14" y2="17"/></svg>
+            Clear
+          </div>
+        </div>
+
+        <div class="status-tabs">
+          <div class="status-tab" [class.active]="activeTab === 'all'" (click)="onStatusTabClick('all')">
+            <span class="count">{{ statusCounts.all }}</span>
+            <span class="label">All</span>
+          </div>
+          <div class="status-tab" [class.active]="activeTab === 'sent'" (click)="onStatusTabClick('sent')">
+            <span class="count green">{{ statusCounts.sent }}</span>
+            <span class="label">Sent</span>
+          </div>
+          <div class="status-tab" [class.active]="activeTab === 'pending'" (click)="onStatusTabClick('pending')">
+            <span class="count orange">{{ statusCounts.pending }}</span>
+            <span class="label">Pending</span>
+          </div>
+          <div class="status-tab" [class.active]="activeTab === 'failed'" (click)="onStatusTabClick('failed')">
+            <span class="count red">{{ statusCounts.failed }}</span>
+            <span class="label">Failed</span>
+          </div>
+        </div>
+
+        <div class="logs-table">
+          <table>
+            <thead>
+              <tr>
+                <th>Message ID</th>
+                <th>Group Name</th>
+                <th>Session ID</th>
+                <th>Message</th>
+                <th>Type</th>
+                <th>Status</th>
+                <th>Created By</th>
+                <th>Timestamp
+                  <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg>
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let log of filteredLogs">
+                <td>{{ log.message_id }}</td>
+                <td>{{ log.group_name }}</td>
+                <td>{{ log.session_id }}</td>
+                <td>{{ log.message }}</td>
+                <td><span class="tag yellow">{{ log.type }}</span></td>
+                <td><span class="tag" [class]="getStatusClass(log.status)">{{ log.status }}</span></td>
+                <td>{{ log.created_by }}</td>
+                <td>{{ formatDate(log.created_at) }}</td>
+              </tr>
+              <tr *ngIf="filteredLogs.length === 0">
+                <td colspan="8" class="no-data">
+                  <p>No message logs found matching your filters.</p>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

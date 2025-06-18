@@ -21,9 +21,20 @@
             ],
             "tsConfig": "tsconfig.app.json",
             "assets": [
+              "src/favicon.ico",
+              {
+                "glob": "**/*",
+                "input": "src/assets",
+                "output": "/assets/"
+              },
               {
                 "glob": "**/*",
                 "input": "public"
+              },
+              {
+                "glob": "index.server.html",
+                "input": "src",
+                "output": "/"
               }
             ],
             "styles": [
@@ -97,5 +108,8 @@
         }
       }
     }
+  },
+  "cli": {
+    "analytics": "0d09b77c-ca10-4bfe-958f-d128636c541e"
   }
 }
