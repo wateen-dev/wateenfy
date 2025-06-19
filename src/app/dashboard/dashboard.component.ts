@@ -53,8 +53,15 @@ export class DashboardComponent implements OnInit {
   }
 
   logout() {
-    this.auth.logout();
-    this.router.navigate(['/login']);
+    this.auth.logout().subscribe({
+      next: () => {
+        this.router.navigate(['/login']);
+      },
+      error: () => {
+        // Even if logout API fails, navigate to login
+        this.router.navigate(['/login']);
+      }
+    });
   }
 
   showQRCodePopup() {

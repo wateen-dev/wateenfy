@@ -83,9 +83,25 @@ export class AuthService {
     );
   }
 
-  logout(): void {
-    this.safeRemoveItem(this.TOKEN_KEY);
-    this.safeRemoveItem(this.USER_KEY);
+  logout(): Observable<any> {
+    const token = this.getToken();
+    const headers = new HttpHeaders({
+      'Authorization': `Bearer ${token}`
+    });
+    // Call logout API, then clear local storage
+    return this.http.get(`${this.API_URL}/auth/logout`, { headers }).pipe(
+      tap({
+        next: () => {
+          this.safeRemoveItem(this.TOKEN_KEY);
+          this.safeRemoveItem(this.USER_KEY);
+        },
+        error: () => {
+          // Even if API fails, clear local storage for security
+          this.safeRemoveItem(this.TOKEN_KEY);
+          this.safeRemoveItem(this.USER_KEY);
+        }
+      })
+    );
   }
 
   getToken(): string | null {
