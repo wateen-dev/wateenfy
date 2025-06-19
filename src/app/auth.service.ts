@@ -88,8 +88,8 @@ export class AuthService {
     const headers = new HttpHeaders({
       'Authorization': `Bearer ${token}`
     });
-    // Call logout API, then clear local storage
-    return this.http.get(`${this.API_URL}/auth/logout`, { headers }).pipe(
+    // Call logout API (POST), then clear local storage
+    return this.http.post(`${this.API_URL}/auth/logout`, {}, { headers }).pipe(
       tap({
         next: () => {
           this.safeRemoveItem(this.TOKEN_KEY);
