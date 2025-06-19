@@ -140,4 +140,10 @@ export class SidebarComponent implements OnInit, OnDestroy {
     const interval = this.statusService.getPollingInterval() / 1000;
     return `Every ${interval}s`;
   }
+
+  clearQRCodePopup() {
+    if (this.qrPopup) {
+      this.qrPopup.hidePopup();
+    }
+  }
 }
