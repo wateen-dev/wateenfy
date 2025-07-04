@@ -29,7 +29,7 @@ interface OverviewResponse {
   providedIn: 'root'
 })
 export class DashboardService {
-  private baseUrl = 'http://172.26.52.46/watify/api';
+  private baseUrl = 'https://watify.wateen.com/watify/api';
 
   constructor(
     private http: HttpClient,

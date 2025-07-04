@@ -7,7 +7,6 @@ import { switchMap } from 'rxjs/operators';
 
 interface CreateGroupWithMembersRequest {
   group_name: string;
-  session_id: string;
   description: string;
   created_by: string;
   modified_by: string;
@@ -27,11 +26,16 @@ interface Group {
   is_deleted: string;
   description: string | null;
   session_id: string;
+  member_count:string;
 }
 
 interface GroupsResponse {
   message: string;
   data: Group[];
+}
+interface MessageResponse {
+  message: string;
+  data: Member[];
 }
 
 interface Member {
@@ -75,7 +79,8 @@ interface AddMemberRequest {
   providedIn: 'root'
 })
 export class WhatsappService {
-  private readonly API_URL = 'http://172.26.52.46/watify/api';
+  // private readonly API_URL = 'http://172.26.52.46/watify/api';
+private readonly API_URL = 'https://watify.wateen.com/watify/api';
 
   constructor(
     private http: HttpClient,
@@ -100,13 +105,10 @@ export class WhatsappService {
         if (!user) {
           throw new Error('User not logged in');
         }
-
         const firstName = user.name.split(' ')[0]; // Get first name
-        const phoneNumber = user.phone_number;
-
+       const phoneNumber = user.email.split('@')[0];
         const request: CreateGroupWithMembersRequest = {
           group_name: groupName,
-          session_id: phoneNumber,
           description: description,
           created_by: firstName,
           modified_by: firstName,
@@ -134,6 +136,15 @@ export class WhatsappService {
     });
 
     return this.http.get<GroupsResponse>(`${this.API_URL}/group/all`, { headers });
+  }
+   getAllMembersByGroupID(group_id: number): Observable<MessageResponse> {
+    const headers = new HttpHeaders({
+      'Accept': 'application/json',
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${this.auth.getToken()}`
+    });
+
+    return this.http.post<MessageResponse>(`${this.API_URL}/member/specificgroup`,{group_id}, { headers });
   }
 
   getAllMembers() {
@@ -184,7 +195,22 @@ export class WhatsappService {
       })
     );
   }
+// logout(){
+//    const headers = new HttpHeaders({
+//     'Authorization': `Bearer ${this.auth.getToken()}`,
+//     'Accept': 'application/json',
+//     'Content-Type': 'application/json'
+//   });
 
+//   this.http.post(`${this.API_URL}/auth/logout`, {}, { headers }).subscribe({
+//     next: () => {
+//       console.log('Logged out from server.');
+//     },
+//     error: (err) => {
+//       console.error('Logout API failed', err);
+//     }
+//   });
+// }
   addGroupMembers(groupName: string, members: { member_name: string; phone_number: string }[]): Observable<any> {
     return this.checkWhatsAppReady().pipe(
       switchMap(() => {

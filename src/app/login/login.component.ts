@@ -12,7 +12,7 @@ import { AuthService } from '../auth.service';
   styleUrls: ['./login.component.scss']
 })
 export class LoginComponent implements OnInit {
-  phoneNumber: string = '';
+  email: string = '';
   password: string = '';
   showPassword: boolean = false;
   errorMessage: string = '';
@@ -28,15 +28,15 @@ export class LoginComponent implements OnInit {
   }
 
   onSubmit() {
-    if (!this.phoneNumber || !this.password) {
-      this.errorMessage = 'Please enter both phone number and password';
+    if (!this.email || !this.password) {
+      this.errorMessage = 'Please enter both email and password';
       return;
     }
 
     this.isLoading = true;
     this.errorMessage = '';
 
-    this.auth.login(this.phoneNumber, this.password).subscribe({
+    this.auth.login(this.email, this.password).subscribe({
       next: (response) => {
         this.isLoading = false;
         this.router.navigate(['/dashboard']);

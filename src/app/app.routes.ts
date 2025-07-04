@@ -7,6 +7,7 @@ import { WhatsappGroupListComponent } from './whatsapp/whatsapp-group-list/whats
 import { WhatsappAddMemberComponent } from './whatsapp/whatsapp-add-member/whatsapp-add-member.component';
 import { WhatsappSearchMemberComponent } from './whatsapp/whatsapp-search-member/whatsapp-search-member.component';
 import { MessageLogsComponent } from './logs/message-logs/message-logs.component';
+import { AdminLogoutComponent } from './admin-logout/admin-logout.component';
 
 export const routes: Routes = [
   { path: '', redirectTo: 'login', pathMatch: 'full' },
@@ -17,5 +18,6 @@ export const routes: Routes = [
   { path: 'whatsapp/add-member', component: WhatsappAddMemberComponent, canActivate: [authGuard] },
   { path: 'whatsapp/search-member', component: WhatsappSearchMemberComponent, canActivate: [authGuard] },
   { path: 'logs', component: MessageLogsComponent, canActivate: [authGuard] },
+   { path: 'admin-logout', component: AdminLogoutComponent, canActivate: [authGuard] },
   // Other routes will be added here later
 ]; 

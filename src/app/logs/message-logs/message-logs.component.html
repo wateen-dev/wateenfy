@@ -110,7 +110,7 @@
                 <td>{{ log.message_id }}</td>
                 <td>{{ log.group_name }}</td>
                 <td>{{ log.session_id }}</td>
-                <td>{{ log.message }}</td>
+                <td style="min-width: 200px;">{{ log.message }}</td>
                 <td><span class="tag yellow">{{ log.type }}</span></td>
                 <td><span class="tag" [class]="getStatusClass(log.status)">{{ log.status }}</span></td>
                 <td>{{ log.created_by }}</td>

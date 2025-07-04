@@ -16,7 +16,7 @@ interface StatusResponse {
   providedIn: 'root'
 })
 export class QRCodeService {
-  private readonly API_URL = 'http://172.26.52.46/watify/api';
+  private readonly API_URL = 'https://watify.wateen.com/watify/api';
 
   constructor(
     private http: HttpClient,
@@ -35,7 +35,7 @@ export class QRCodeService {
     });
 
     return this.http.get<QRCodeResponse>(
-      `${this.API_URL}/whatsapp/${user.phone_number}/qr`,
+      `${this.API_URL}/whatsapp/qr`,
       { headers }
     );
   }
@@ -50,9 +50,8 @@ export class QRCodeService {
       'Accept': 'application/json',
       'Authorization': `Bearer ${this.auth.getToken()}`
     });
-
     return this.http.get<StatusResponse>(
-      `${this.API_URL}/whatsapp/${user.phone_number}/status`,
+      `${this.API_URL}/whatsapp/status`,
       { headers }
     );
   }

@@ -15,6 +15,19 @@ interface Group {
   is_deleted: string;
   description: string | null;
   session_id: string;
+  member_count:string | null;
+}
+interface Member {
+  member_id: string;
+  member_name: string;
+  member_number: string;
+  session_id: string;
+  group_name: string | null;
+  created_by: string | null;
+  created_at: string;
+  modified_at: string;
+  modified_by: string | null;
+  is_deleted: string;
 }
 
 @Component({
@@ -27,9 +40,13 @@ interface Group {
 export class WhatsappGroupListComponent implements OnInit {
   groups: Group[] = [];
   filteredGroups: Group[] = [];
+  members: Member[] = [];
+  filteredMembers: Member[] = [];
   searchTerm: string = '';
   isLoading: boolean = false;
   errorMessage: string = '';
+  selectedGroupId: number | null = null;
+  showGroupPopup = false;
 
   constructor(
     private whatsappService: WhatsappService,
@@ -39,7 +56,26 @@ export class WhatsappGroupListComponent implements OnInit {
   ngOnInit() {
     this.loadGroups();
   }
+  openGroupPopup(groupId: number): void {
+    this.selectedGroupId = +groupId;
+    this.showGroupPopup = true;
 
+    this.whatsappService.getAllMembersByGroupID(groupId).subscribe({
+      next: (response) => {
+        this.members = response.data;
+        this.filteredMembers = response.data;
+        this.isLoading = false;
+      },
+      error: (error) => {
+        this.isLoading = false;
+        this.errorMessage = error.error?.message || 'Failed to load members. Please contact system administrator.';
+      }
+    });
+  }
+  closePopup(): void {
+    this.showGroupPopup = false;
+    this.selectedGroupId = null;
+  }
   loadGroups() {
     this.isLoading = true;
     this.errorMessage = '';
@@ -47,6 +83,7 @@ export class WhatsappGroupListComponent implements OnInit {
     this.whatsappService.getGroups().subscribe({
       next: (response) => {
         this.groups = response.data;
+        console.log(this.groups);
         this.filteredGroups = response.data;
         this.isLoading = false;
       },
