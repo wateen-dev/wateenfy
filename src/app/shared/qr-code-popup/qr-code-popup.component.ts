@@ -19,6 +19,7 @@ export class QRCodePopupComponent implements OnInit, OnDestroy {
   whatsappStatus: WhatsAppStatus | null = null;
   isPolling: boolean = false;
   private statusSubscription: Subscription | null = null;
+  private statusCheckTimeout: any = null;
 
   constructor(
     private qrCodeService: QRCodeService,
@@ -50,14 +51,28 @@ export class QRCodePopupComponent implements OnInit, OnDestroy {
   showPopup() {
     this.isVisible = true;
     this.loadQRCode();
-    // Polling is now handled automatically by the service
-    // No need to start polling here
+    // Start a 30-second timer to check status once
+    if (this.statusCheckTimeout) {
+      clearTimeout(this.statusCheckTimeout);
+    }
+    this.statusCheckTimeout = setTimeout(() => {
+      this.statusService.refreshStatus().subscribe(status => {
+        if (status?.isReady) {
+          this.hidePopup();
+        }
+      });
+    }, 30000);
   }
 
   hidePopup() {
     this.isVisible = false;
     this.qrCodeData = '';
     this.errorMessage = '';
+    // Clear the status check timer if popup is closed manually
+    if (this.statusCheckTimeout) {
+      clearTimeout(this.statusCheckTimeout);
+      this.statusCheckTimeout = null;
+    }
     // Don't stop polling when popup is closed - keep it running in background
   }
 
