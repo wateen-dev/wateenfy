@@ -55,6 +55,7 @@ export class DashboardComponent implements OnInit {
   logout() {
     this.sidebar?.clearQRCodePopup();
     this.auth.logout();
+    this.router.navigate(['/login']);
   }
 
   showQRCodePopup() {

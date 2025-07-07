@@ -1,6 +1,4 @@
-body, html {
-  font-family: 'Public Sans', sans-serif;
-}
+
 .message-logs-layout {
   display: flex;
   min-height: 100vh;
@@ -12,7 +10,6 @@ body, html {
   display: flex;
   flex-direction: column;
   padding: 2rem 2.5rem;
-  font-family: 'Public Sans', sans-serif;
 }
 
 .message-logs-page {
@@ -20,7 +17,6 @@ body, html {
 }
 
 .page-header {
-  display: flex;
   justify-content: space-between;
   align-items: center;
   margin-bottom: 2rem;
@@ -49,7 +45,6 @@ body, html {
     font-weight: 700;
     color: #222c36;
     margin: 0;
-    font-family: 'Public Sans', sans-serif;
   }
 }
 
@@ -144,10 +139,10 @@ body, html {
     flex-direction: column;
 
     label {
-      font-size: 0.95rem;
+      font-size: 12px;
       color: #555;
       margin-bottom: 0.5rem;
-      font-weight: 500;
+      font-weight: bold;
     }
 
     .input-with-icon {
@@ -207,18 +202,20 @@ body, html {
       }
     }
 
-    &.search-filter {
-      flex-grow: 1;
-      min-width: 250px; /* Adjust as needed */
-    }
+    // &.search-filter {
+    //   flex-grow: 1;
+    //   min-width: 250px; /* Adjust as needed */
+    // }
   }
 
   .clear-filter {
+    position: relative;
+    top:-2px;
     display: flex;
     align-items: center;
     gap: 0.3rem;
     color: #ff4d4f;
-    font-size: 0.95rem;
+    font-size:1rem;
     font-weight: 500;
     cursor: pointer;
     padding: 0.5rem;
@@ -239,8 +236,15 @@ body, html {
   gap: 1.5rem;
   border-bottom: 1px solid #e0e0e0;
   margin-bottom: 1.5rem;
-  font-family: 'Public Sans', sans-serif;
 
+    .status-tab .count {
+        font-size: 16px;
+      }
+  .status-tab .label{
+    color:black !important;
+    font-size: 12px;
+   
+  }
   .status-tab {
     display: flex;
     align-items: center;
@@ -251,7 +255,6 @@ body, html {
     cursor: pointer;
     border-bottom: 2px solid transparent;
     transition: border-color 0.2s, color 0.2s;
-  font-family: 'Public Sans', sans-serif;
 
     &.active {
       color: #3bbf6c;
@@ -296,7 +299,6 @@ body, html {
         font-weight: 600;
         border-bottom: 1px solid #e0e0e0;
         white-space: nowrap;
-  font-family: 'Public Sans', sans-serif;
         svg {
           width: 14px;
           height: 14px;
@@ -359,4 +361,6 @@ body, html {
     }
   }
 }
-
+.input-with-icon svg{
+  display: none;
+}

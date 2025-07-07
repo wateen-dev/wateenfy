@@ -16,7 +16,6 @@
 }
 
 .page-header {
-  max-width: 900px;
   margin: 0 auto 2rem auto;
   padding: 0 2rem;
   .breadcrumb {
@@ -348,4 +347,14 @@ form {
     width: 100%;
     justify-content: center;
   }
+}
+.member-alert {
+  background-color: #ffcdcd;
+  color: #9e0e1c;
+  padding: 16px;
+  border: 1px solid #ffeeba;
+  border-radius: 6px;
+  font-size: 14px;
+  margin: 20px 0;
+  font-family: 'Public Sans', sans-serif;
 }

@@ -16,7 +16,6 @@
 }
 
 .page-header {
-  display: flex;
   justify-content: space-between;
   align-items: center;
   margin-bottom: 2rem;
@@ -92,7 +91,7 @@
 
   .search-icon {
     position: absolute;
-    left: 1rem;
+    left: 6px;
     top: 50%;
     transform: translateY(-50%);
     color: #888;

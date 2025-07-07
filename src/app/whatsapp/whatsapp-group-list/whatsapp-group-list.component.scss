@@ -16,7 +16,7 @@
 }
 
 .page-header {
-  display: flex;
+  
   justify-content: space-between;
   align-items: center;
   margin-bottom: 2rem;
@@ -52,6 +52,7 @@
     font-weight: 500;
     cursor: pointer;
     display: flex;
+    float: right;
     align-items: center;
     gap: 0.5rem;
     transition: background 0.2s;
@@ -229,7 +230,7 @@ table {
 
 .modal-header {
   display: flex;
-  justify-content: space-between;
+  justify-content: left;
   align-items: center;
   border-bottom: 1px solid #eee;
   margin-bottom: 16px;
@@ -241,6 +242,10 @@ table {
 }
 
 .close-btn {
+  position: absolute;
+  right: 20px;
+  top:27px;
+  float: inline-end;
   background: transparent;
   border: none;
   font-size: 28px;
@@ -280,8 +285,8 @@ table {
   background-color: #3f51b5;      /* Indigo base color */
   color: #fff;
   border: none;
-  padding: 6px 16px;
-  font-size: 14px;
+  padding: 3px 10px;
+  font-size: 12px;
   border-radius: 6px;
   cursor: pointer;
   transition: background-color 0.3s ease, transform 0.2s ease;
@@ -291,7 +296,9 @@ table {
 }
 
 .view-members-btn:hover {
-  background-color: #303f9f;
+  background-color: white;
+  border:2px solid #3f51b5;
+  color:#3f51b5;
   transform: translateY(-1px);
 }
 
@@ -303,9 +310,5 @@ table {
 .view-members-btn:focus {
   outline: none;
   box-shadow: 0 0 0 3px rgba(63, 81, 181, 0.3);
-}
-
-html {
-  zoom: 90%;
 }
 
