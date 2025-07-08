@@ -100,24 +100,23 @@ table {
     padding: 1rem 1rem;
     border-bottom: 1px solid #eee;
     white-space: nowrap; /* Prevent text wrapping in cells */
+    font-size: 12px;
   }
 
   th {
-    font-weight: 600;
-    color: #666;
-    font-size: 1rem;
+    font-weight: 500;
+    font-size: 14px;
   }
 
   td {
     color: #333;
-    font-size: 0.95rem;
 
     .group-id-badge {
       background: #eafaf2;
       color: #3bbf6c;
       padding: 0.3rem 0.6rem;
       border-radius: 12px;
-      font-size: 0.85rem;
+      font-size: 12px;
       font-weight: 600;
     }
 
@@ -133,14 +132,14 @@ table {
       color: #007bff;
       padding: 0.3rem 0.6rem;
       border-radius: 12px;
-      font-size: 0.85rem;
+      font-size: 12px;
       font-weight: 600;
     }
 
     .status-badge {
       padding: 0.3rem 0.6rem;
       border-radius: 12px;
-      font-size: 0.85rem;
+      font-size: 12px;
       font-weight: 600;
 
       &.active {
@@ -200,10 +199,10 @@ table {
 }
 
 .no-data {
-  text-align: center;
+  text-align: center !important;
   color: #666;
   padding: 2rem !important;
-  font-style: italic;
+  font-weight: bold;
 }
 .modal-overlay {
   position: fixed;
@@ -220,8 +219,8 @@ table {
 
 .modal-container {
   background: #fff;
-  width: 66.66%; /* ~8 out of 12 columns (Bootstrap style) */
-  max-width: 800px;
+  width: 80.66%; /* ~8 out of 12 columns (Bootstrap style) */
+  // max-width: 800px;
   border-radius: 12px;
   padding: 24px;
   box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
@@ -309,6 +308,94 @@ table {
 
 .view-members-btn:focus {
   outline: none;
-  box-shadow: 0 0 0 3px rgba(63, 81, 181, 0.3);
+  box-shadow: 0 0 0 3px rgba(73, 87, 168, 0.3);
+}
+.pagination-controls {
+  margin-top: 16px;
+  display: flex;
+  gap: 6px;
+  justify-content: end;
 }
 
+.pagination-controls button {
+  padding: 6px 12px;
+  border: 1px solid #ccc;
+  background-color: white;
+  cursor: pointer;
+  border-radius: 4px;
+}
+
+.pagination-controls button.active {
+  background-color: #3f51b5;
+  color: white;
+  font-weight: normal;
+}
+
+.pagination-controls button:disabled {
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+
+.actions-button {
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 4px;
+}
+
+// .action-menu {
+//   padding: 8px;
+//   border-radius: 4px;
+//   min-width: 100px;
+// }
+
+// .delete-btn {
+//   background-color: transparent;
+//   border: none;
+//   color: red;
+//   cursor: pointer;
+//   padding: 6px 12px;
+//   width: 100%;
+//   text-align: left;
+// }
+.action-menu {
+  position: absolute;
+  right: 0;
+
+  background-color: #fff;
+  border: 1px solid #e0e0e0;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
+  padding: 8px 0;
+  min-width: 120px;
+  z-index: 1000;
+  animation: fadeIn 0.2s ease-in-out;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(-4px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.delete-btn {
+  background-color: transparent;
+  border: none;
+  width: 100%;
+  padding: 8px 16px;
+  text-align: left;
+  color: #d32f2f;
+  font-weight: 500;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  transition: background 0.2s ease-in-out;
+}
+
+.delete-btn:hover {
+  background-color: #fbe9e7;
+}
+
+.delete-icon {
+  stroke: #d32f2f;
+}

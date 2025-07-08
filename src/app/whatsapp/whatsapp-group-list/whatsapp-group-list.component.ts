@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, HostListener, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
@@ -15,7 +15,7 @@ interface Group {
   is_deleted: string;
   description: string | null;
   session_id: string;
-  member_count:string | null;
+  member_count: string | null;
 }
 interface Member {
   member_id: string;
@@ -47,23 +47,33 @@ export class WhatsappGroupListComponent implements OnInit {
   errorMessage: string = '';
   selectedGroupId: number | null = null;
   showGroupPopup = false;
+  memberPageSize = 2;
+  memberCurrentPage = 1;
+  paginatedMembers: any[] = []; // Current page
+  memberSearchTerm: string = '';
+  pageSize = 4; // You can change to 10, 20, etc.
+  currentPage = 1;
+  paginatedGroups: any[] = []; // Displayed on current page
+  activeActionMemberId: number | null = null;
 
   constructor(
     private whatsappService: WhatsappService,
     private router: Router
-  ) {}
+  ) { }
 
   ngOnInit() {
     this.loadGroups();
+
   }
   openGroupPopup(groupId: number): void {
     this.selectedGroupId = +groupId;
     this.showGroupPopup = true;
-
+    this.memberCurrentPage = 1;
     this.whatsappService.getAllMembersByGroupID(groupId).subscribe({
       next: (response) => {
         this.members = response.data;
         this.filteredMembers = response.data;
+        this.updatePaginatedMembers();
         this.isLoading = false;
       },
       error: (error) => {
@@ -72,9 +82,38 @@ export class WhatsappGroupListComponent implements OnInit {
       }
     });
   }
+  toggleActionMenu(memberId: number) {
+  this.activeActionMemberId = this.activeActionMemberId === memberId ? null : memberId;
+}
+
+deleteMember(memberId: number) {
+  // your delete logic
+  console.log('Deleting member:', memberId);
+
+  // Optionally close the menu
+  this.activeActionMemberId = null;
+
+  // Call API and refresh list here
+}
   closePopup(): void {
     this.showGroupPopup = false;
     this.selectedGroupId = null;
+  }
+  updatePaginatedGroups() {
+    const start = (this.currentPage - 1) * this.pageSize;
+    const end = start + this.pageSize;
+    this.paginatedGroups = this.filteredGroups.slice(start, end);
+  }
+
+  // Optional: For previous/next page buttons
+  changePage(page: number) {
+    this.currentPage = page;
+    this.updatePaginatedGroups();
+  }
+
+  // Optional: To get total number of pages
+  get totalPages(): number {
+    return Math.ceil(this.filteredGroups.length / this.pageSize);
   }
   loadGroups() {
     this.isLoading = true;
@@ -86,6 +125,7 @@ export class WhatsappGroupListComponent implements OnInit {
         console.log(this.groups);
         this.filteredGroups = response.data;
         this.isLoading = false;
+        this.updatePaginatedGroups();
       },
       error: (error) => {
         this.isLoading = false;
@@ -95,17 +135,21 @@ export class WhatsappGroupListComponent implements OnInit {
   }
 
   onSearch() {
-    if (!this.searchTerm.trim()) {
+    const term = this.searchTerm.trim().toLowerCase();
+
+    if (!term) {
       this.filteredGroups = this.groups;
-      return;
+    } else {
+      this.filteredGroups = this.groups.filter(group =>
+        group.group_name.toLowerCase().includes(term) ||
+        group.description?.toLowerCase().includes(term)
+      );
     }
 
-    const searchLower = this.searchTerm.toLowerCase();
-    this.filteredGroups = this.groups.filter(group => 
-      group.group_name.toLowerCase().includes(searchLower) ||
-      group.description?.toLowerCase().includes(searchLower)
-    );
+    this.currentPage = 1; // Reset to first page after search
+    this.updatePaginatedGroups(); // Refresh paginated view
   }
+
 
   onCreateGroup() {
     this.router.navigate(['/whatsapp/create-group']);
@@ -119,4 +163,45 @@ export class WhatsappGroupListComponent implements OnInit {
       day: 'numeric'
     });
   }
+  updatePaginatedMembers() {
+    const start = (this.memberCurrentPage - 1) * this.memberPageSize;
+    const end = start + this.memberPageSize;
+    this.paginatedMembers = this.filteredMembers.slice(start, end);
+  }
+
+  changeMemberPage(page: number) {
+    this.memberCurrentPage = page;
+    this.updatePaginatedMembers();
+  }
+
+  get memberTotalPages(): number {
+    return Math.ceil(this.filteredMembers.length / this.memberPageSize);
+  }
+
+  onMemberSearch() {
+    const term = this.memberSearchTerm.trim().toLowerCase();
+
+    if (!term) {
+      this.filteredMembers = [...this.members];
+    } else {
+      this.filteredMembers = this.members.filter(member =>
+        member.member_name?.toLowerCase().includes(term) ||
+        member.member_number?.toLowerCase().includes(term) ||
+        member.group_name?.toLowerCase().includes(term) ||
+        member.created_by?.toLowerCase().includes(term)
+      );
+    }
+
+    this.memberCurrentPage = 1;
+    this.updatePaginatedMembers();
+  }
+  @HostListener('document:click', ['$event'])
+handleClickOutside(event: MouseEvent) {
+  const target = event.target as HTMLElement;
+  if (!target.closest('.actions-button') && !target.closest('.action-menu')) {
+    this.activeActionMemberId = null;
+  }
 }
+
+}
+
