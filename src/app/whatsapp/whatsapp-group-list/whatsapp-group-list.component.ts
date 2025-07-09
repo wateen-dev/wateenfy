@@ -44,6 +44,7 @@ export class WhatsappGroupListComponent implements OnInit {
   filteredMembers: Member[] = [];
   searchTerm: string = '';
   isLoading: boolean = false;
+  isDeleteMemberLoading: boolean = false;
   errorMessage: string = '';
   selectedGroupId: number | null = null;
   showGroupPopup = false;
@@ -55,7 +56,7 @@ export class WhatsappGroupListComponent implements OnInit {
   currentPage = 1;
   paginatedGroups: any[] = []; // Displayed on current page
   activeActionMemberId: number | null = null;
-
+  successMessage: string = '';
   constructor(
     private whatsappService: WhatsappService,
     private router: Router
@@ -83,18 +84,33 @@ export class WhatsappGroupListComponent implements OnInit {
     });
   }
   toggleActionMenu(memberId: number) {
-  this.activeActionMemberId = this.activeActionMemberId === memberId ? null : memberId;
-}
+    this.activeActionMemberId = this.activeActionMemberId === memberId ? null : memberId;
+  }
 
-deleteMember(memberId: number) {
-  // your delete logic
-  console.log('Deleting member:', memberId);
+  deleteMember(memberId: number) {
+    this.isDeleteMemberLoading = true;
+    console.log('Deleting member:', memberId);
+    this.whatsappService.deleteMember(+memberId).subscribe({
+      next: (response) => {
+        this.successMessage = 'Member ID: ' + memberId + ' has been deleted successfully';
 
-  // Optionally close the menu
-  this.activeActionMemberId = null;
+        // Navigate to search member screen after 2 seconds
+        setTimeout(() => {
+          this.isDeleteMemberLoading = false;
+          this.closePopup();
+          this.loadGroups();
+        }, 2000);
+      },
+      error: (error) => {
+        this.isDeleteMemberLoading = false;
+        this.errorMessage = error.error?.message || 'Failed to delete member! Please contact System Administrator';
+      }
+    });
+    // Optionally close the menu
+    this.activeActionMemberId = null;
 
-  // Call API and refresh list here
-}
+    // Call API and refresh list here
+  }
   closePopup(): void {
     this.showGroupPopup = false;
     this.selectedGroupId = null;
@@ -196,12 +212,12 @@ deleteMember(memberId: number) {
     this.updatePaginatedMembers();
   }
   @HostListener('document:click', ['$event'])
-handleClickOutside(event: MouseEvent) {
-  const target = event.target as HTMLElement;
-  if (!target.closest('.actions-button') && !target.closest('.action-menu')) {
-    this.activeActionMemberId = null;
+  handleClickOutside(event: MouseEvent) {
+    const target = event.target as HTMLElement;
+    if (!target.closest('.actions-button') && !target.closest('.action-menu')) {
+      this.activeActionMemberId = null;
+    }
   }
-}
 
 }
 

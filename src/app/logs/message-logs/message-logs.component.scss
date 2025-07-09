@@ -23,7 +23,7 @@
 
   .breadcrumb {
     color: #7b8794;
-    font-size: 1.05rem;
+    font-size: 12px;
     margin-bottom: 0.5rem;
     display: flex;
     align-items: center;
@@ -31,7 +31,7 @@
 
     .breadcrumb-sep {
       color: #b0b0b0;
-      font-size: 1.2rem;
+      font-size: 14px;
     }
 
     .breadcrumb-current {
@@ -41,7 +41,7 @@
   }
 
   h1 {
-    font-size: 2rem;
+    font-size: 16px;
     font-weight: 700;
     color: #222c36;
     margin: 0;
@@ -71,7 +71,7 @@
 
   p {
     color: #666;
-    font-size: 1.1rem;
+    font-size: 14px;
     margin: 0;
   }
 }
@@ -94,7 +94,7 @@
 
   p {
     color: #ff4d4f;
-    font-size: 1.1rem;
+    font-size: 14px;
     margin-bottom: 1rem;
     text-align: center;
   }
@@ -105,7 +105,7 @@
     border: none;
     padding: 0.75rem 1.5rem;
     border-radius: 8px;
-    font-size: 1rem;
+    font-size: 14px;
     font-weight: 500;
     cursor: pointer;
     transition: background-color 0.2s;
@@ -152,7 +152,7 @@
         padding: 0.7rem 2.5rem 0.7rem 1rem;
         border: 1px solid #e0e0e0;
         border-radius: 8px;
-        font-size: 1rem;
+        font-size: 14px;
         background: #fff;
         box-sizing: border-box;
         &:focus {
@@ -181,7 +181,7 @@
         padding: 0.7rem 2.5rem 0.7rem 1rem;
         border: 1px solid #e0e0e0;
         border-radius: 8px;
-        font-size: 1rem;
+        font-size: 14px;
         background: #fff;
         cursor: pointer;
         outline: none;
@@ -215,7 +215,7 @@
     align-items: center;
     gap: 0.3rem;
     color: #ff4d4f;
-    font-size:1rem;
+    font-size:14px;
     font-weight: 500;
     cursor: pointer;
     padding: 0.5rem;
@@ -250,7 +250,7 @@
     align-items: center;
     gap: 0.5rem;
     padding: 0.5rem 0;
-    font-size: 1.05rem;
+    font-size: 14px;
     color: #555;
     cursor: pointer;
     border-bottom: 2px solid transparent;
@@ -294,7 +294,7 @@
       th {
         padding: 0.8rem 1rem;
         text-align: left;
-        font-size: 0.95rem;
+        font-size: 14px;
         color: #555;
         font-weight: 600;
         border-bottom: 1px solid #e0e0e0;
@@ -318,7 +318,7 @@
         td {
           padding: 1rem;
           border-bottom: 1px solid #e0e0e0;
-          font-size: 0.95rem;
+          font-size: 12px;
           color: #333;
           vertical-align: top;
 
@@ -326,7 +326,7 @@
             display: inline-block;
             padding: 0.3rem 0.6rem;
             border-radius: 12px;
-            font-size: 0.85rem;
+            font-size: 10px;
             font-weight: 600;
 
             &.yellow {
@@ -363,4 +363,29 @@
 }
 .input-with-icon svg{
   display: none;
+}
+.pagination-controls {
+  margin-top: 16px;
+  display: flex;
+  gap: 6px;
+  justify-content: end;
+}
+
+.pagination-controls button {
+  padding: 6px 12px;
+  border: 1px solid #ccc;
+  background-color: white;
+  cursor: pointer;
+  border-radius: 4px;
+}
+
+.pagination-controls button.active {
+  background-color: #3f51b5;
+  color: white;
+  font-weight: normal;
+}
+
+.pagination-controls button:disabled {
+  cursor: not-allowed;
+  opacity: 0.5;
 }

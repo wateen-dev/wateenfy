@@ -16,7 +16,12 @@ export class MessageLogsComponent implements OnInit {
   filteredLogs: MessageLog[] = [];
   loading = true;
   error = '';
-  
+  // Pagination
+ // Pagination for message logs
+logCurrentPage: number = 1;
+logItemsPerPage: number = 5;
+paginatedLogs: MessageLog[] = [];
+
   // Filter properties
   startDate = '';
   endDate = '';
@@ -67,44 +72,82 @@ export class MessageLogsComponent implements OnInit {
     };
   }
 
+  // applyFilters() {
+  //   let filtered = [...this.messageLogs];
+
+  //   // Filter by status
+  //   if (this.statusType !== 'all') {
+  //     filtered = filtered.filter(log => 
+  //       log.status.toUpperCase() === this.statusType.toUpperCase()
+  //     );
+  //   }
+
+  //   // Filter by search term
+  //   if (this.searchTerm.trim()) {
+  //     const search = this.searchTerm.toLowerCase();
+  //     filtered = filtered.filter(log =>
+  //       log.message.toLowerCase().includes(search) ||
+  //       log.session_id.includes(search) ||
+  //       log.group_name.toLowerCase().includes(search)
+  //     );
+  //   }
+
+  //   // Filter by date range
+  //   if (this.startDate) {
+  //     const startDate = new Date(this.startDate);
+  //     filtered = filtered.filter(log => 
+  //       new Date(log.created_at) >= startDate
+  //     );
+  //   }
+
+  //   if (this.endDate) {
+  //     const endDate = new Date(this.endDate);
+  //     endDate.setHours(23, 59, 59, 999); // End of day
+  //     filtered = filtered.filter(log => 
+  //       new Date(log.created_at) <= endDate
+  //     );
+  //   }
+
+  //   this.filteredLogs = filtered;
+  // }
   applyFilters() {
-    let filtered = [...this.messageLogs];
+  let filtered = [...this.messageLogs];
 
-    // Filter by status
-    if (this.statusType !== 'all') {
-      filtered = filtered.filter(log => 
-        log.status.toUpperCase() === this.statusType.toUpperCase()
-      );
-    }
-
-    // Filter by search term
-    if (this.searchTerm.trim()) {
-      const search = this.searchTerm.toLowerCase();
-      filtered = filtered.filter(log =>
-        log.message.toLowerCase().includes(search) ||
-        log.session_id.includes(search) ||
-        log.group_name.toLowerCase().includes(search)
-      );
-    }
-
-    // Filter by date range
-    if (this.startDate) {
-      const startDate = new Date(this.startDate);
-      filtered = filtered.filter(log => 
-        new Date(log.created_at) >= startDate
-      );
-    }
-
-    if (this.endDate) {
-      const endDate = new Date(this.endDate);
-      endDate.setHours(23, 59, 59, 999); // End of day
-      filtered = filtered.filter(log => 
-        new Date(log.created_at) <= endDate
-      );
-    }
-
-    this.filteredLogs = filtered;
+  // Existing filters
+  if (this.statusType !== 'all') {
+    filtered = filtered.filter(log =>
+      log.status.toUpperCase() === this.statusType.toUpperCase()
+    );
   }
+
+  if (this.searchTerm.trim()) {
+    const search = this.searchTerm.toLowerCase();
+    filtered = filtered.filter(log =>
+      log.message.toLowerCase().includes(search) ||
+      log.session_id.includes(search) ||
+      log.group_name.toLowerCase().includes(search)
+    );
+  }
+
+  if (this.startDate) {
+    const start = new Date(this.startDate);
+    filtered = filtered.filter(log =>
+      new Date(log.created_at) >= start
+    );
+  }
+
+  if (this.endDate) {
+    const end = new Date(this.endDate);
+    end.setHours(23, 59, 59, 999);
+    filtered = filtered.filter(log =>
+      new Date(log.created_at) <= end
+    );
+  }
+
+  this.filteredLogs = filtered;
+  this.logCurrentPage = 1;
+  this.updatePaginatedLogs();
+}
 
   onStatusTabClick(status: string) {
     this.activeTab = status;
@@ -157,4 +200,20 @@ export class MessageLogsComponent implements OnInit {
         return 'yellow';
     }
   }
+get logTotalPages(): number {
+  return Math.ceil(this.filteredLogs.length / this.logItemsPerPage);
+}
+
+changeLogPage(page: number) {
+  if (page < 1 || page > this.logTotalPages) return;
+  this.logCurrentPage = page;
+  this.updatePaginatedLogs();
+}
+
+updatePaginatedLogs() {
+  const start = (this.logCurrentPage - 1) * this.logItemsPerPage;
+  const end = start + this.logItemsPerPage;
+  this.paginatedLogs = this.filteredLogs.slice(start, end);
+}
+  
 }

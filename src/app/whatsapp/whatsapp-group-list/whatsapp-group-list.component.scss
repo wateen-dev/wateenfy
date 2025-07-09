@@ -399,3 +399,55 @@ table {
 .delete-icon {
   stroke: #d32f2f;
 }
+// Messages
+.error-message {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: #dc2626;
+  font-size: 12px;
+  padding: 1rem;
+  background: #fee2e2;
+  border-radius: 8px;
+  border: 1px solid #fecaca;
+
+  svg {
+    flex-shrink: 0;
+  }
+}
+
+.success-message {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: #16a34a;
+  font-size: 12px;
+  padding: 1rem;
+  background: #f0fff4;
+  border-radius: 8px;
+  border: 1px solid #d4edda;
+
+  svg {
+    flex-shrink: 0;
+  }
+}
+/* Spinner container (optional, center align etc.) */
+.loading-spinner {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
+  color: #333;
+}
+
+/* The spinning SVG */
+.spinner-icon {
+  animation: spin 1s linear infinite;
+  stroke: #007bff; /* Blue, matches Material primary */
+}
+
+/* Spinner keyframes */
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}

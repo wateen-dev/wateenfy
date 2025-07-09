@@ -106,7 +106,7 @@
               </tr>
             </thead>
             <tbody>
-              <tr *ngFor="let log of filteredLogs">
+              <tr *ngFor="let log of paginatedLogs">
                 <td>{{ log.message_id }}</td>
                 <td>{{ log.group_name }}</td>
                 <td>{{ log.session_id }}</td>
@@ -123,6 +123,24 @@
               </tr>
             </tbody>
           </table>
+          <div class="pagination-controls" *ngIf="logTotalPages > 1">
+  <button (click)="changeLogPage(logCurrentPage - 1)" [disabled]="logCurrentPage === 1">
+    Previous
+  </button>
+
+  <ng-container *ngFor="let page of [].constructor(logTotalPages); let i = index">
+    <button 
+      (click)="changeLogPage(i + 1)" 
+      [class.active]="logCurrentPage === i + 1">
+      {{ i + 1 }}
+    </button>
+  </ng-container>
+
+  <button (click)="changeLogPage(logCurrentPage + 1)" [disabled]="logCurrentPage === logTotalPages">
+    Next
+  </button>
+</div>
+
         </div>
       </div>
     </div>

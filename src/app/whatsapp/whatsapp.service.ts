@@ -15,6 +15,9 @@ interface CreateGroupWithMembersRequest {
     phone_number: string;
   }[];
 }
+interface DeleteMemberRequest {
+ member_id:number;
+}
 
 interface Group {
   group_id: string;
@@ -125,6 +128,23 @@ private readonly API_URL = 'https://watify.wateen.com/watify/api';
         });
 
         return this.http.post(`${this.API_URL}/whatsapp/add`, request, { headers });
+      })
+    );
+  }
+
+    deleteMember(memberID: number): Observable<any> {
+    return this.checkWhatsAppReady().pipe(
+      switchMap(() => {
+        const request: DeleteMemberRequest = {
+          member_id: memberID,
+        }; 
+        const headers = new HttpHeaders({
+          'Content-Type': 'application/json',
+          'Accept': 'application/json',
+          'Authorization': `Bearer ${this.auth.getToken()}`
+        });
+
+        return this.http.put(`${this.API_URL}/member/delete`, request, { headers });
       })
     );
   }
