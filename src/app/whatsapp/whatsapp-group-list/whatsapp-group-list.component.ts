@@ -103,6 +103,7 @@ export class WhatsappGroupListComponent implements OnInit {
       },
       error: (error) => {
         this.isDeleteMemberLoading = false;
+         this.closePopup();
         this.errorMessage = error.error?.message || 'Failed to delete member! Please contact System Administrator';
       }
     });
@@ -126,6 +127,19 @@ export class WhatsappGroupListComponent implements OnInit {
     this.currentPage = page;
     this.updatePaginatedGroups();
   }
+ retryMember(member: any): void {
+  const payload = {
+    group_name: member.group_name,
+    members: [
+      {
+        member_name: member.member_name,
+        phone_number: member.phone_number
+      }
+    ]
+  };
+
+  // this.http.post('/api/retry-member', payload).subscribe(...)
+}
 
   // Optional: To get total number of pages
   get totalPages(): number {
@@ -218,6 +232,11 @@ export class WhatsappGroupListComponent implements OnInit {
       this.activeActionMemberId = null;
     }
   }
+formatStatus(status: string | undefined | null): string {
+  if (!status) return '';
+  const lower = status.toLowerCase();
+  return lower.charAt(0).toUpperCase() + lower.slice(1);
+}
 
 }
 

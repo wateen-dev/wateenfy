@@ -66,6 +66,20 @@ export class SidebarComponent implements OnInit, OnDestroy {
       this.statusService.startBackgroundPolling();
     }
   }
+onCreateGroupClick(event: MouseEvent): void {
+  if (!this.isWhatsAppReady()) {
+    event.preventDefault(); // Prevent default anchor behavior
+    event.stopPropagation(); // Prevent event bubbling
+    // Optional: show toast/snackbar
+  }
+}
+onAddMemberClick(event: MouseEvent): void {
+  if (!this.isWhatsAppReady()) {
+    event.preventDefault();
+    event.stopPropagation();
+    // Optional: show notification or toast
+  }
+}
 
   ngOnDestroy() {
     if (this.statusSubscription) {

@@ -451,3 +451,47 @@ table {
   0% { transform: rotate(0deg); }
   100% { transform: rotate(360deg); }
 }
+.status-badge {
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-weight: bold;
+  text-transform: capitalize;
+  color: white;
+}
+
+.status-active {
+  background-color: #eafaf2;
+  color:green;
+}
+
+.status-pending {
+  background-color: #eafaf2;
+  color: blue;
+}
+
+.status-invited {
+  background-color: #eafaf2;
+  color: goldenrod;
+}
+
+.status-deleted {
+  background-color: #eafaf2;
+  color: red;
+}
+
+.retry-btn {
+  display: block;
+  margin-top: 8px;
+  padding: 6px 12px;
+  background-color: white;
+  color: #e68900;
+  border: none;
+  border-radius: 4px;
+  font-size: 13px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.retry-btn:hover {
+  background-color: #fbe9e7;
+}

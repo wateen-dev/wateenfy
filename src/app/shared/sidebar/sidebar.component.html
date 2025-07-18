@@ -97,25 +97,23 @@
       <svg class="chevron" width="18" height="18" fill="none" stroke="#888" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24" [ngClass]="{open: whatsappMenuOpen}"><polyline points="6 9 12 15 18 9"/></svg>
     </div>
     <div class="submenu" *ngIf="whatsappMenuOpen">
-      <a class="submenu-item" 
-         routerLink="/whatsapp/create-group" 
-         (click)="$event.stopPropagation()"
-         [class.disabled]="!isWhatsAppReady()"
-         [title]="!isWhatsAppReady() ? 'WhatsApp must be connected to create groups' : ''">
-        Create Group
-      </a>
+    <a class="submenu-item" [routerLink]="isWhatsAppReady() ? ['/whatsapp/create-group'] : null"
+      (click)="onCreateGroupClick($event)" [class.disabled]="!isWhatsAppReady()"
+      [title]="!isWhatsAppReady() ? 'WhatsApp must be connected to create groups' : ''">
+      Create Group
+    </a>
+
       <a class="submenu-item" 
          routerLink="/whatsapp/list-groups" 
          (click)="$event.stopPropagation()">
         List Groups
       </a>
-      <a class="submenu-item" 
-         routerLink="/whatsapp/add-member" 
-         (click)="$event.stopPropagation()"
-         [class.disabled]="!isWhatsAppReady()"
-         [title]="!isWhatsAppReady() ? 'WhatsApp must be connected to add members' : ''">
-        Add Member
-      </a>
+    <a class="submenu-item" [routerLink]="isWhatsAppReady() ? ['/whatsapp/add-member'] : null"
+      (click)="onAddMemberClick($event)" [class.disabled]="!isWhatsAppReady()"
+      [title]="!isWhatsAppReady() ? 'WhatsApp must be connected to add members' : ''">
+      Add Member
+    </a>
+
       <a class="submenu-item" 
          routerLink="/whatsapp/search-member" 
          (click)="$event.stopPropagation()">

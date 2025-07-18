@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { SidebarComponent } from '../../shared/sidebar/sidebar.component';
 import { MessageLogsService, MessageLog, MessageLogsResponse } from './message-logs.service';
 import { FormsModule } from '@angular/forms';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-message-logs',
@@ -38,10 +39,14 @@ paginatedLogs: MessageLog[] = [];
   
   activeTab = 'all';
 
-  constructor(private messageLogsService: MessageLogsService) {}
+  constructor(private messageLogsService: MessageLogsService,private route: ActivatedRoute) {}
 
   ngOnInit() {
     this.loadMessageLogs();
+    this.route.queryParams.subscribe(params => {
+    this.activeTab = params['tab'] || 'all';
+    this.onStatusTabClick(this.activeTab);
+  });
   }
 
   loadMessageLogs() {

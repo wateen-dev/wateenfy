@@ -53,6 +53,7 @@ interface Member {
   is_deleted: string;
   group_name: string;
   session_id: string;
+  status:string;
 }
 
 interface ApiResponse<T> {

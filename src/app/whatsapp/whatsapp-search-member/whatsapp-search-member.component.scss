@@ -506,3 +506,188 @@
   }
 }
 
+/* -- search ----------------------------------------------------- */
+.search-bar {
+  margin: 1rem 0;
+}
+.search-bar input {
+  width: 100%;
+  padding: 0.6rem 0.9rem;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  font-size: 15px;
+}
+
+/* -- table ------------------------------------------------------ */
+.table-container {
+  overflow-x: auto;
+}
+.members-table {
+  width: 100%;
+  border-collapse: collapse;
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0 0 0 / 0.05);
+  font-family: 'Segoe UI', sans-serif;
+}
+.members-table thead {
+  background: #f7f7f9;
+}
+.members-table th,
+.members-table td {
+  padding: 12px 16px;
+  white-space: nowrap;
+}
+.members-table tbody tr:nth-child(odd) {
+  background: #fafafa;
+}
+.members-table tbody tr:hover {
+  background: #f0f8ff;
+  cursor: pointer;
+}
+
+/* badges */
+.id-badge {
+  background: #e8f0fe;
+  color: #1a73e8;
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-size: 12px;
+}
+.status-badge {
+  padding: 2px 8px;
+  border-radius: 12px;
+  font-size: 12px;
+  background: #eee;
+  color: #666;
+}
+.status-badge.active {
+  background: #e6f4ea;
+  color: #188038;
+}
+
+/* -- pagination ------------------------------------------------- */
+.pagination {
+  display: flex;
+  gap: 4px;
+  justify-content: flex-end;
+  margin: 1rem 0;
+}
+.pagination button {
+  padding: 4px 10px;
+  border: 1px solid #ccc;
+  background: #fff;
+  border-radius: 6px;
+  cursor: pointer;
+}
+.pagination button.active {
+  background: #1a73e8;
+  color: #fff;
+  border-color: #1a73e8;
+}
+.pagination button[disabled] {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* icon button */
+.icon-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 18px;
+  line-height: 1;
+}
+
+/* message */
+.error-message,
+.no-data {
+  text-align: center;
+  margin: 2rem 0;
+  color: #d32f2f;
+}
+.position-relative {
+  position: relative;
+}
+
+.actions-button {
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 5px;
+  border-radius: 5px;
+  transition: background 0.2s ease;
+}
+
+.actions-button:hover {
+  background-color: rgba(0, 0, 0, 0.05);
+}
+
+.action-menu {
+  position: absolute;
+  right: 0;
+  top: 80%;
+  background-color: #fff;
+  border: 1px solid #ddd;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  border-radius: 8px;
+    z-index: 100;
+    padding-top: 12px;
+    padding-left: 12px;
+    padding-right: 12px;
+    padding-bottom: 12px;
+    display: flex;
+    flex-direction: column;
+}
+
+.action-menu button {
+  background: none;
+  border: none;
+  width: 100%;
+  padding: 10px 16px;
+  text-align: left;
+  font-size: 14px;
+  cursor: pointer;
+  color: #333;
+  transition: background 0.2s, color 0.2s;
+  display: flex;
+  align-items: center;
+}
+
+.action-menu button:hover {
+  background-color: #f5f5f5;
+}
+
+.delete-btn {
+  color: white !important; // Red color
+  background-color: #b71c1c !important ;// Soft red background
+  border-radius:10px;
+  padding-bottom: 50px;
+  position: relative;
+  top:-5px;
+}
+
+.delete-btn:hover {
+  color: #b71c1c !important; // Darker red on hover
+  border: 1px solid #b71c1c !important;
+  background-color: white !important;
+}
+
+.retry-btn {
+  background-color: #1565c0 !important; // Blue tone
+  color: white !important; // Blue tone
+    border-radius:10px;
+   border: 1px solid #1565c0 !important;
+}
+
+.retry-btn:hover {
+  color: #0d47a1 !important; // Darker blue
+  background-color: white !important; // Soft blue background
+}
+
+.delete-icon {
+  margin-right: 8px;
+  vertical-align: middle;
+}
+
+

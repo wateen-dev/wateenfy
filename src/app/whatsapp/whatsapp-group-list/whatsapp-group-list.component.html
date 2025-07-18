@@ -147,11 +147,24 @@
                     <td>{{ member.member_number || '-' }}</td>
                     <td>{{ member.session_id }}</td>
                     <td>{{ member.group_name }}</td>
-                    <td>
+                    <!-- <td>
                       <span class="status-badge" [class.active]="member.is_deleted === 'F'">
-                        {{ member.is_deleted === 'F' ? 'Active' : 'Deleted' }}
+                        {{ member.status === 'F' ? member.status : 'Deleted' }}
                       </span>
-                    </td>
+                    </td> -->
+                  <td>
+                    <span class="status-badge" [ngClass]="{
+                        'status-active': member.status?.toLowerCase() === 'active',
+                        'status-pending': member.status?.toLowerCase() === 'pending',
+                        'status-invited': member.status?.toLowerCase() === 'invited',
+                        'status-deleted': member.status?.toLowerCase() !== 'active' &&
+                                          member.status?.toLowerCase() !== 'pending' &&
+                                          member.status?.toLowerCase() !== 'invited'
+                      }">
+                      {{ formatStatus(member.status) }}
+                    </span>
+                  </td>
+
                     <td>{{ formatDate(member.created_at) }}</td>
                     <td>{{ member.created_by }}</td>
                   <td class="position-relative">
@@ -177,7 +190,11 @@
                         </svg>
                         Delete
                       </button>
-                    </div>
+                      <!-- Conditionally show Retry button if status is Pending -->
+                      <button *ngIf="member.status?.toLowerCase() === 'pending'" 
+                       class="retry-btn">
+                        🔄 Retry Member
+                      </button>     </div>
 
                   </td>
 

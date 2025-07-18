@@ -7,7 +7,8 @@
     <header class="topbar">
       <div class="topbar-buttons">
         <button class="scan-btn" (click)="showQRCodePopup()">
-          <svg width="22" height="22" fill="none" stroke="#3bbf6c" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24">
+          <svg width="22" height="22" fill="none" stroke="#3bbf6c" stroke-width="2" stroke-linecap="round"
+            stroke-linejoin="round" viewBox="0 0 24 24">
             <path d="M3 7V5a2 2 0 0 1 2-2h2"></path>
             <path d="M17 3h2a2 2 0 0 1 2 2v2"></path>
             <path d="M21 17v2a2 2 0 0 1-2 2h-2"></path>
@@ -20,7 +21,12 @@
           Scan QR
         </button>
         <button class="logout-btn" (click)="logout()">
-          <svg width="22" height="22" fill="none" stroke="#ff4d4f" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+          <svg width="22" height="22" fill="none" stroke="#ff4d4f" stroke-width="2" stroke-linecap="round"
+            stroke-linejoin="round" viewBox="0 0 24 24">
+            <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
+            <polyline points="16 17 21 12 16 7" />
+            <line x1="21" y1="12" x2="9" y2="12" />
+          </svg>
           Logout
         </button>
       </div>
@@ -37,13 +43,16 @@
       <p>{{ error }}</p>
       <button (click)="loadDashboardStats()" class="retry-btn">Retry</button>
     </div>
+       <h1>Member & Group Logs</h1>
 
     <!-- Dashboard Metrics Cards -->
     <div *ngIf="!loading && !error" class="dashboard-metrics">
       <!-- Registered Groups Card -->
-      <div class="metric-card groups-card">
+      <div class="metric-card groups-card" (click)="goToGroups()">
+
         <div class="metric-icon">
-          <svg width="32" height="32" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24">
+          <svg width="32" height="32" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+            stroke-linejoin="round" viewBox="0 0 24 24">
             <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
             <circle cx="9" cy="7" r="4"></circle>
             <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
@@ -55,17 +64,146 @@
           <div class="metric-label">Registered Groups</div>
         </div>
         <div class="metric-trend positive">
-          <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24">
+          <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+            stroke-linejoin="round" viewBox="0 0 24 24">
             <polyline points="18 15 12 9 6 15"></polyline>
           </svg>
           <span>+12%</span>
         </div>
+
+      </div>
+      <!-- Total Members Card -->
+      <div class="metric-card total-members-card" (click)="goToSearchMemberPage()">
+        <div class="metric-icon">
+          <svg width="32" height="32" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+            stroke-linejoin="round" viewBox="0 0 24 24">
+            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+            <circle cx="12" cy="7" r="4"></circle>
+          </svg>
+        </div>
+        <div class="metric-content">
+          <div class="metric-value">{{ dashboardStats.totalMembers || 0 }}</div>
+          <div class="metric-label">Total Members</div>
+        </div>
+        <div class="metric-trend positive">
+          <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+            stroke-linejoin="round" viewBox="0 0 24 24">
+            <polyline points="18 15 12 9 6 15"></polyline>
+          </svg>
+          <span>+15%</span>
+        </div>
       </div>
 
-      <!-- Sent Messages Card -->
-      <div class="metric-card sent-messages-card">
+      <div class="metric-card invited-members-card" (click)="goToSearchMemberPage()">
         <div class="metric-icon">
-          <svg width="32" height="32" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24">
+          <svg width="32" height="32" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+            stroke-linejoin="round" viewBox="0 0 24 24">
+            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+            <circle cx="12" cy="7" r="4"></circle>
+          </svg>
+        </div>
+        <div class="metric-content">
+          <div class="metric-value">{{ dashboardStats.totalMembers || 0 }}</div>
+          <div class="metric-label">Invited Members</div>
+        </div>
+        <div class="metric-trend positive">
+          <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+            stroke-linejoin="round" viewBox="0 0 24 24">
+            <polyline points="18 15 12 9 6 15"></polyline>
+          </svg>
+          <span>+15%</span>
+        </div>
+      </div>
+      <div class="metric-card pending-members-card" (click)="goToSearchMemberPage()">
+        <div class="metric-icon">
+          <svg width="32" height="32" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+            stroke-linejoin="round" viewBox="0 0 24 24">
+            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+            <circle cx="12" cy="7" r="4"></circle>
+          </svg>
+        </div>
+        <div class="metric-content">
+          <div class="metric-value">{{ dashboardStats.totalMembers || 0 }}</div>
+          <div class="metric-label">Pending Members</div>
+        </div>
+        <div class="metric-trend positive">
+          <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+            stroke-linejoin="round" viewBox="0 0 24 24">
+            <polyline points="18 15 12 9 6 15"></polyline>
+          </svg>
+          <span>+15%</span>
+        </div>
+      </div>
+      <div class="metric-card active-members-card" (click)="goToSearchMemberPage()">
+        <div class="metric-icon">
+          <svg width="32" height="32" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+            stroke-linejoin="round" viewBox="0 0 24 24">
+            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+            <circle cx="12" cy="7" r="4"></circle>
+          </svg>
+        </div>
+        <div class="metric-content">
+          <div class="metric-value">{{ dashboardStats.totalMembers || 0 }}</div>
+          <div class="metric-label">Active Members</div>
+        </div>
+        <div class="metric-trend positive">
+          <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+            stroke-linejoin="round" viewBox="0 0 24 24">
+            <polyline points="18 15 12 9 6 15"></polyline>
+          </svg>
+          <span>+15%</span>
+        </div>
+      </div>
+    </div>
+
+    <h1>Message Logs</h1>
+    <div class="row g-3 align-items-end mb-3 stylingbottom">
+      <div class="col-md-5">
+        <label for="startDate" class="form-label">From Date</label>
+        <div class="input-with-icon position-relative">
+
+          <!-- Date input -->
+          <input type="date" id="startDate" class="form-control pe-5" [(ngModel)]="startDate" (change)="onDateChange()"
+            #startDateInput (click)="openDatePicker(startDateInput)" />
+
+          <!-- Calendar Icon -->
+          <svg class="calendar-icon position-absolute"
+            style="right:10px; top:50%; transform:translateY(-50%); cursor:pointer;" width="18" height="18" fill="none"
+            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24">
+          </svg>
+        </div>
+      </div>
+      <div class="col-md-5">
+        <label for="endDate" class="form-label">To Date</label>
+
+        <!-- wrapper so the entire area—including the icon— is clickable -->
+        <div class="input-with-icon position-relative">
+
+          <!-- the date input -->
+          <input type="date" id="endDate" class="form-control pe-5" [(ngModel)]="endDate" (change)="onDateChange()"
+            #endDateInput (click)="openDatePicker(endDateInput)" />
+
+          <!-- calendar icon -->
+          <svg class="calendar-icon position-absolute"
+            style="right:10px; top:50%; transform:translateY(-50%); cursor:pointer;" width="18" height="18" fill="none"
+            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"
+            (click)="openDatePicker(endDateInput)">
+
+          </svg>
+        </div>
+      </div>
+
+
+      <div class="col-md-2">
+        <button class="btn btn-primary btnapply" (click)="applyDateFilter()">Apply</button>
+      </div>
+    </div>
+    <!-- Sent Messages Card -->
+    <div *ngIf="!loading && !error" class="dashboard-metrics">
+      <div class="metric-card sent-messages-card" (click)="goToLogs('sent')">
+        <div class="metric-icon">
+          <svg width="32" height="32" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+            stroke-linejoin="round" viewBox="0 0 24 24">
             <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
             <path d="M8 9h8"></path>
             <path d="M8 13h6"></path>
@@ -76,7 +214,8 @@
           <div class="metric-label">Sent Messages</div>
         </div>
         <div class="metric-trend positive">
-          <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24">
+          <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+            stroke-linejoin="round" viewBox="0 0 24 24">
             <polyline points="18 15 12 9 6 15"></polyline>
           </svg>
           <span>+8%</span>
@@ -84,9 +223,10 @@
       </div>
 
       <!-- Pending Messages Card -->
-      <div class="metric-card pending-messages-card">
+      <div class="metric-card pending-messages-card" (click)="goToLogs('failed')">
         <div class="metric-icon">
-          <svg width="32" height="32" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24">
+          <svg width="32" height="32" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+            stroke-linejoin="round" viewBox="0 0 24 24">
             <circle cx="12" cy="12" r="10"></circle>
             <polyline points="12,6 12,12 16,14"></polyline>
           </svg>
@@ -96,37 +236,17 @@
           <div class="metric-label">Pending Messages</div>
         </div>
         <div class="metric-trend negative">
-          <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24">
+          <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+            stroke-linejoin="round" viewBox="0 0 24 24">
             <polyline points="6 9 12 15 18 9"></polyline>
           </svg>
           <span>-3%</span>
         </div>
       </div>
-
-      <!-- Total Members Card -->
-      <div class="metric-card total-members-card">
-        <div class="metric-icon">
-          <svg width="32" height="32" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24">
-            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
-            <circle cx="12" cy="7" r="4"></circle>
-          </svg>
-        </div>
-        <div class="metric-content">
-          <div class="metric-value">{{ dashboardStats.totalMembers || 0 }}</div>
-          <div class="metric-label">Total Members</div>
-        </div>
-        <div class="metric-trend positive">
-          <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24">
-            <polyline points="18 15 12 9 6 15"></polyline>
-          </svg>
-          <span>+15%</span>
-        </div>
-      </div>
     </div>
-
     <!-- Additional Dashboard Content -->
     <div class="dashboard-bottom">
       <!-- Add any additional dashboard content here -->
     </div>
   </div>
-</div> 
+</div>

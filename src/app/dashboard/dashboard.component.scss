@@ -4,7 +4,11 @@
   background: #f7f9fa;
   font-family: 'Inter', Arial, sans-serif;
 }
-
+h1{
+  font-size: 22px;
+  font-weight: 400;
+  padding-bottom: 20px;
+}
 .sidebar {
   width: 270px;
   background: #fff;
@@ -244,10 +248,12 @@
   transition: transform 0.2s, box-shadow 0.2s;
   position: relative;
   overflow: hidden;
+  cursor:pointer;
 
   &:hover {
     transform: translateY(-2px);
     box-shadow: 0 4px 24px 0 rgba(0, 0, 0, 0.12);
+    background-color: #eaeaea;
   }
 
   &::before {
@@ -343,6 +349,17 @@
 
   &.total-members-card .metric-icon {
     background: linear-gradient(135deg, #2196f3 0%, #1976d2 100%);
+  }
+ &.invited-members-card .metric-icon {
+    background: linear-gradient(135deg, #5a2287 0%, #591b4c 100%);
+  }
+
+  &.pending-members-card .metric-icon {
+    background: linear-gradient(135deg, #ffb300 0%, #f57c00 100%);
+  }
+
+  &.active-members-card .metric-icon {
+    background: linear-gradient(135deg, #66bb6a 0%, #388e3c 100%);
   }
 }
 
@@ -468,3 +485,82 @@
     }
   }
 } 
+
+.input-with-icon {
+  position: relative;
+
+  input[type='date'] {
+    padding-right: 2.2rem;
+    border: 1px solid #ced4da;
+    border-radius: 6px;
+    height: 40px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+    font-size: 14px;
+  }
+
+  input[type='date']:focus {
+    border-color: #86b7fe;
+    outline: 0;
+    box-shadow: 0 0 0 0.2rem rgba(13, 110, 253, 0.25);
+  }
+
+  .calendar-icon {
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    pointer-events: none;
+    color: #6c757d;
+    opacity: 0.6;
+  }
+}
+
+/* Label Styling */
+.form-label {
+  font-weight: 600;
+  font-size: 14px;
+  margin-bottom: 4px;
+  color: #333;
+}
+
+/* Apply Button */
+.btn-primary {
+  font-weight: 500;
+  border-radius: 6px;
+  height: 35px;
+  font-size: 14px;
+  transition: background-color 0.3s ease;
+}
+
+.btn-primary:hover {
+  background-color: #0b5ed7;
+}
+
+.stylingbottom{
+  padding-bottom: 30px;
+}
+.btnapply{
+  position:relative;top:25px;
+  background-color: #0b5ed7;
+  color: white;
+  border:1px solid #0b5ed7;
+}
+.btnapply:hover{
+  background-color: white;
+  color:#0b5ed7;
+
+}
+.input-with-icon {
+  position: relative;
+
+  input[type='date'] {
+    padding-right: 2.2rem;
+  }
+
+  .calendar-icon {
+    pointer-events: auto; // ensure it can receive clicks
+    color: #6c757d;
+    opacity: 0.6;
+  }
+}

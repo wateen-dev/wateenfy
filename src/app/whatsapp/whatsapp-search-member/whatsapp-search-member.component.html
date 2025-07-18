@@ -15,135 +15,119 @@
         </div>
         <h1>Search member details</h1>
       </div>
+<!-- SEARCH -->
+<div class="search-bar">
+  <input
+    type="text"
+    placeholder="Search by member name, number or group…"
+    [(ngModel)]="searchTerm"
+    (input)="onSearch()"     
+  />
+</div>
 
-      <div class="form-card">
-        <div class="member-profile-search">
-          <h2>Member Profile Search</h2>
-          <p>Search member and its respective groups details</p>
-          <div class="search-input-container">
-            <input type="text" placeholder="Search by member name or number..." [(ngModel)]="searchTerm" (input)="onSearchTermChange()" />
-            <svg class="search-icon" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-            <svg *ngIf="searchTerm" class="clear-icon" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24" (click)="clearSearch()"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg>
-            <div class="search-results" *ngIf="searchTerm && searchResults.length > 0">
-              <div class="result-item" *ngFor="let result of searchResults" (click)="selectMember(result)">
-                <div class="profile-picture-placeholder"></div>
-                <div class="member-info">
-                  <div class="member-name">{{ result.member_name }}</div>
-                  <div class="member-number">{{ result.member_number }}</div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
+<!-- TABLE -->
+<div class="table-container" *ngIf="!isLoading">
+  <table class="members-table">
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Member Name</th>
+        <th>Number</th>
+        <th>Group</th>
+        <th>Created By</th>
+        <th>Status</th>
+        <th>Created At</th>
+        <th>Action</th>
+      </tr>
+    </thead>
 
-        <!-- Loading State -->
-        <div class="loading-container" *ngIf="isLoading">
-          <div class="loading-spinner"></div>
-          <p>Loading members...</p>
-        </div>
+    <tbody>
+      <!-- ✅ use the paginated slice -->
+      <tr *ngFor="let m of paginatedMembers">
+        <td><span class="id-badge">#{{ m.member_id }}</span></td>
+        <td>{{ m.member_name }}</td>
+        <td>{{ m.member_number }}</td>
+        <td>{{ m.group_name }}</td>
+        <td>{{ m.created_by }}</td>
+        <td>
+          <span class="status-badge" [class.active]="m.status === 'ACTIVE'">
+            {{ m.status }}
+          </span>
+        </td>
+        <td>{{ formatDate(m.created_at) }}</td>
+     <td class="position-relative">
+  <!-- 3-dot Action Button -->
+  <button class="actions-button" (click)="toggleActionMenu(m.member_id)">
+    <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"
+      stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24">
+      <circle cx="12" cy="12" r="1" />
+      <circle cx="12" cy="5" r="1" />
+      <circle cx="12" cy="19" r="1" />
+    </svg>
+  </button>
 
-        <!-- Error State -->
-        <div class="error-container" *ngIf="errorMessage">
-          <svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24">
-            <circle cx="12" cy="12" r="10"></circle>
-            <line x1="15" y1="9" x2="9" y2="15"></line>
-            <line x1="9" y1="9" x2="15" y2="15"></line>
-          </svg>
-          <p>{{ errorMessage }}</p>
-          <button class="retry-btn" (click)="loadMembers()">Try Again</button>
-        </div>
+  <!-- Action Menu (shown only if activeActionMemberId matches) -->
+  <div class="action-menu" *ngIf="activeActionMemberId === m.member_id">
+    <button (click)="deleteMember(m.member_id)" class="delete-btn">
+      <svg xmlns="http://www.w3.org/2000/svg" class="delete-icon" width="16" height="16" fill="none"
+        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+        viewBox="0 0 24 24">
+        <polyline points="3 6 5 6 21 6" />
+        <path
+          d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" />
+        <line x1="10" y1="11" x2="10" y2="17" />
+        <line x1="14" y1="11" x2="14" y2="17" />
+      </svg>
+      Delete
+    </button>
+    <button class="retry-btn" (click)="deleteMemberFromAllGroups(m)">
+      <svg xmlns="http://www.w3.org/2000/svg" class="delete-icon" width="16" height="16" fill="none"
+        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+        viewBox="0 0 24 24">
+        <polyline points="3 6 5 6 21 6" />
+        <path
+          d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" />
+        <line x1="10" y1="11" x2="10" y2="17" />
+        <line x1="14" y1="11" x2="14" y2="17" />
+      </svg>
+      Delete All
+    </button>
+  </div>
+</td>
 
-        <!-- Members Grid -->
-        <div class="members-grid" *ngIf="!isLoading && !errorMessage && displayedMembers.length > 0">
-          <div class="grid-header">
-            <h3>{{ searchTerm ? 'Search Results' : 'All Members' }}</h3>
-            <span class="member-count">{{ displayedMembers.length }} member{{ displayedMembers.length !== 1 ? 's' : '' }}</span>
-          </div>
-          <div class="members-cards">
-            <div class="member-card" 
-                 *ngFor="let member of displayedMembers" 
-                 [ngClass]="getMemberCardClass(member)"
-                 (click)="selectMember(member)">
-              <div class="card-header">
-                <div class="profile-picture-placeholder"></div>
-                <div class="member-basic-info">
-                  <h4 class="member-name">{{ member.member_name }}</h4>
-                  <p class="member-number">{{ member.member_number }}</p>
-                </div>
-              </div>
-              <div class="card-body">
-                <div class="member-detail">
-                  <span class="label">Group:</span>
-                  <span class="value">{{ member.group_name }}</span>
-                </div>
-                <div class="member-detail">
-                  <span class="label">Member ID:</span>
-                  <span class="value">{{ member.member_id }}</span>
-                </div>
-                <div class="member-detail">
-                  <span class="label">Created:</span>
-                  <span class="value">{{ formatDate(member.created_at) }}</span>
-                </div>
-                <div class="member-detail">
-                  <span class="label">Created By:</span>
-                  <span class="value">{{ member.created_by }}</span>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
+      </tr>
 
-        <!-- No Results -->
-        <div class="no-results" *ngIf="!isLoading && !errorMessage && displayedMembers.length === 0">
-          <svg width="48" height="48" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24">
-            <circle cx="11" cy="11" r="8"></circle>
-            <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
-          </svg>
-          <h3>{{ searchTerm ? 'No members found' : 'No members available' }}</h3>
-          <p>{{ searchTerm ? 'Try adjusting your search terms' : 'There are no members in the system yet.' }}</p>
-        </div>
+      <!-- show only when filtered list is empty -->
+      <tr *ngIf="filteredMembers.length === 0">
+        <td colspan="7" class="no-data">No members found</td>
+      </tr>
+    </tbody>
+  </table>
 
-        <!-- Selected Member Details -->
-        <div class="member-details-card" *ngIf="selectedMember">
-          <div class="details-header">
-            <h3>Selected Member Details</h3>
-            <button class="close-btn" (click)="selectedMember = null">
-              <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24">
-                <line x1="18" y1="6" x2="6" y2="18"></line>
-                <line x1="6" y1="6" x2="18" y2="18"></line>
-              </svg>
-            </button>
-          </div>
-          <div class="details-content">
-            <div class="profile-picture-placeholder large"></div>
-            <div class="details">
-              <div class="group-name">{{ selectedMember.group_name }}</div>
-              <div class="member-info">
-                <div class="info-row">
-                  <span class="label">Member ID:</span>
-                  <span class="value">{{ selectedMember.member_id }}</span>
-                </div>
-                <div class="info-row">
-                  <span class="label">Created By:</span>
-                  <span class="value">{{ selectedMember.created_by }}</span>
-                </div>
-                <div class="info-row">
-                  <span class="label">Created At:</span>
-                  <span class="value">{{ selectedMember.created_at | date:'medium' }}</span>
-                </div>
-                <div class="info-row">
-                  <span class="label">Modified By:</span>
-                  <span class="value">{{ selectedMember.modified_by }}</span>
-                </div>
-                <div class="info-row">
-                  <span class="label">Modified At:</span>
-                  <span class="value">{{ selectedMember.modified_at | date:'medium' }}</span>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
+  <!-- PAGINATION (unchanged markup) -->
+  <div class="pagination" *ngIf="totalPages > 1">
+    <button (click)="changePage(currentPage - 1)" [disabled]="currentPage === 1">
+      ‹ Prev
+    </button>
+
+    <button
+      *ngFor="let pg of [].constructor(totalPages); let i = index"
+      (click)="changePage(i + 1)"
+      [class.active]="currentPage === i + 1"
+    >
+      {{ i + 1 }}
+    </button>
+
+    <button
+      (click)="changePage(currentPage + 1)"
+      [disabled]="currentPage === totalPages"
+    >
+      Next ›
+    </button>
+  </div>
+</div>
+
+  
     </div>
   </div>
 </div>
