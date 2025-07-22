@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Observable, throwError } from 'rxjs';
 import { AuthService } from '../auth.service';
 import { WhatsAppStatusService } from '../services/whatsapp-status.service';
@@ -16,7 +16,11 @@ interface CreateGroupWithMembersRequest {
   }[];
 }
 interface DeleteMemberRequest {
- member_id:number;
+  member_id: number;
+}
+interface GroupManagement {
+  group_id: string;
+  group_name: string;
 }
 
 interface Group {
@@ -29,7 +33,7 @@ interface Group {
   is_deleted: string;
   description: string | null;
   session_id: string;
-  member_count:string;
+  member_count: string;
 }
 
 interface GroupsResponse {
@@ -37,6 +41,10 @@ interface GroupsResponse {
   data: Group[];
 }
 interface MessageResponse {
+  message: string;
+  data: Member[];
+}
+interface MemberResponse {
   message: string;
   data: Member[];
 }
@@ -53,12 +61,23 @@ interface Member {
   is_deleted: string;
   group_name: string;
   session_id: string;
-  status:string;
+  status: string;
 }
 
 interface ApiResponse<T> {
   message: string;
   data: T[];
+}
+export interface GroupMemberMapping {
+  member_id: string;
+  groups: GroupManagement[];
+}
+export interface RemoveGroupMemberMapping {
+  member_id: string;
+  type:string;
+}
+interface MemberGroupsResponse {
+  data: Array<Group & { [key: string]: any }>;
 }
 
 interface AddMembersToGroupRequest {
@@ -84,13 +103,13 @@ interface AddMemberRequest {
 })
 export class WhatsappService {
   // private readonly API_URL = 'http://172.26.52.46/watify/api';
-private readonly API_URL = 'https://watify.wateen.com/watify/api';
+  private readonly API_URL = 'https://watify.wateen.com/watify/api';
 
   constructor(
     private http: HttpClient,
     private auth: AuthService,
     private statusService: WhatsAppStatusService
-  ) {}
+  ) { }
 
   private checkWhatsAppReady(): Observable<boolean> {
     if (!this.statusService.isReady()) {
@@ -110,7 +129,7 @@ private readonly API_URL = 'https://watify.wateen.com/watify/api';
           throw new Error('User not logged in');
         }
         const firstName = user.name.split(' ')[0]; // Get first name
-       const phoneNumber = user.email.split('@')[0];
+        const phoneNumber = user.email.split('@')[0];
         const request: CreateGroupWithMembersRequest = {
           group_name: groupName,
           description: description,
@@ -133,12 +152,12 @@ private readonly API_URL = 'https://watify.wateen.com/watify/api';
     );
   }
 
-    deleteMember(memberID: number): Observable<any> {
+  deleteMember(memberID: number): Observable<any> {
     return this.checkWhatsAppReady().pipe(
       switchMap(() => {
         const request: DeleteMemberRequest = {
           member_id: memberID,
-        }; 
+        };
         const headers = new HttpHeaders({
           'Content-Type': 'application/json',
           'Accept': 'application/json',
@@ -158,14 +177,22 @@ private readonly API_URL = 'https://watify.wateen.com/watify/api';
 
     return this.http.get<GroupsResponse>(`${this.API_URL}/group/all`, { headers });
   }
-   getAllMembersByGroupID(group_id: number): Observable<MessageResponse> {
+  getMembers(): Observable<MemberResponse> {
+    const headers = new HttpHeaders({
+      'Accept': 'application/json',
+      'Authorization': `Bearer ${this.auth.getToken()}`
+    });
+
+    return this.http.get<MemberResponse>(`${this.API_URL}/member/all_members`, { headers });
+  }
+  getAllMembersByGroupID(group_id: number): Observable<MessageResponse> {
     const headers = new HttpHeaders({
       'Accept': 'application/json',
       'Content-Type': 'application/json',
       'Authorization': `Bearer ${this.auth.getToken()}`
     });
 
-    return this.http.post<MessageResponse>(`${this.API_URL}/member/specificgroup`,{group_id}, { headers });
+    return this.http.post<MessageResponse>(`${this.API_URL}/member/specificgroup`, { group_id }, { headers });
   }
 
   getAllMembers() {
@@ -176,6 +203,31 @@ private readonly API_URL = 'https://watify.wateen.com/watify/api';
 
     return this.http.get<ApiResponse<Member>>(`${this.API_URL}/member/all`, { headers });
   }
+getSelectedGroups(memberId: string): Observable<MemberGroupsResponse> {
+  return this.checkWhatsAppReady().pipe(
+    switchMap(() => {
+      const user = this.auth.getUser();
+      if (!user) {
+        throw new Error('User not logged in');
+      }
+
+      const headers = new HttpHeaders({
+        'Content-Type': 'application/json',
+        'Accept': 'application/json',
+        'Authorization': `Bearer ${this.auth.getToken()}`
+      });
+
+      const body = { member_id: memberId };
+
+      return this.http.post<MemberGroupsResponse>(
+        `${this.API_URL}/member/member_groups`,
+        body,
+        { headers }
+      );
+    })
+  );
+}
+
 
   // Method to check if WhatsApp is ready (for UI components)
   isWhatsAppReady(): boolean {
@@ -216,22 +268,22 @@ private readonly API_URL = 'https://watify.wateen.com/watify/api';
       })
     );
   }
-// logout(){
-//    const headers = new HttpHeaders({
-//     'Authorization': `Bearer ${this.auth.getToken()}`,
-//     'Accept': 'application/json',
-//     'Content-Type': 'application/json'
-//   });
+  // logout(){
+  //    const headers = new HttpHeaders({
+  //     'Authorization': `Bearer ${this.auth.getToken()}`,
+  //     'Accept': 'application/json',
+  //     'Content-Type': 'application/json'
+  //   });
 
-//   this.http.post(`${this.API_URL}/auth/logout`, {}, { headers }).subscribe({
-//     next: () => {
-//       console.log('Logged out from server.');
-//     },
-//     error: (err) => {
-//       console.error('Logout API failed', err);
-//     }
-//   });
-// }
+  //   this.http.post(`${this.API_URL}/auth/logout`, {}, { headers }).subscribe({
+  //     next: () => {
+  //       console.log('Logged out from server.');
+  //     },
+  //     error: (err) => {
+  //       console.error('Logout API failed', err);
+  //     }
+  //   });
+  // }
   addGroupMembers(groupName: string, members: { member_name: string; phone_number: string }[]): Observable<any> {
     return this.checkWhatsAppReady().pipe(
       switchMap(() => {
@@ -256,6 +308,76 @@ private readonly API_URL = 'https://watify.wateen.com/watify/api';
         };
 
         return this.http.post(`${this.API_URL}/whatsapp/add-group-members`, request, { headers });
+      })
+    );
+  }
+
+  addGroupMemberQueue(mapping: GroupMemberMapping): Observable<any> {
+    return this.checkWhatsAppReady().pipe(
+      switchMap(() => {
+        const user = this.auth.getUser();
+        if (!user) {
+          throw new Error('User not logged in');
+        }
+
+        const headers = new HttpHeaders({
+          'Content-Type': 'application/json',
+          Accept: 'application/json',
+          Authorization: `Bearer ${this.auth.getToken()}`
+        });
+
+        // send `mapping` as the body
+        return this.http.post(
+          `${this.API_URL}/member/add-member-groups`,
+          mapping,
+          { headers }
+        );
+      })
+    );
+  }
+  removeGroupMemberQueue(mapping: GroupMemberMapping): Observable<any> {
+   return this.checkWhatsAppReady().pipe(
+      switchMap(() => {
+        const user = this.auth.getUser();
+        if (!user) {
+          throw new Error('User not logged in');
+        }
+
+        const headers = new HttpHeaders({
+          'Content-Type': 'application/json',
+          Accept: 'application/json',
+          Authorization: `Bearer ${this.auth.getToken()}`
+        });
+
+        // send `mapping` as the body
+        return this.http.post(
+          `${this.API_URL}/member/delete-member-groups`,
+          mapping,
+          { headers }
+        );
+      })
+    );
+  }
+  removeAllGroupMemberQueue(mapping: RemoveGroupMemberMapping): Observable<any> {
+    return this.checkWhatsAppReady().pipe(
+      switchMap(() => {
+        const user = this.auth.getUser();
+        if (!user) {
+          throw new Error('User not logged in');
+        }
+
+        const headers = new HttpHeaders({
+          'Content-Type': 'application/json',
+          Accept: 'application/json',
+          Authorization: `Bearer ${this.auth.getToken()}`
+        });
+
+        // send `mapping` as the body
+        return this.http.post(
+          `${this.API_URL}/member/delete-member-groups`,
+          mapping,
+          { headers }
+        );
       })
     );
   }

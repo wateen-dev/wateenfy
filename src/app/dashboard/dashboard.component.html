@@ -157,16 +157,14 @@
     </div>
 
     <h1>Message Logs</h1>
-    <div class="row g-3 align-items-end mb-3 stylingbottom">
+    <!-- <div class="row g-3 align-items-end mb-3 stylingbottom">
       <div class="col-md-5">
         <label for="startDate" class="form-label">From Date</label>
         <div class="input-with-icon position-relative">
 
-          <!-- Date input -->
           <input type="date" id="startDate" class="form-control pe-5" [(ngModel)]="startDate" (change)="onDateChange()"
             #startDateInput (click)="openDatePicker(startDateInput)" />
 
-          <!-- Calendar Icon -->
           <svg class="calendar-icon position-absolute"
             style="right:10px; top:50%; transform:translateY(-50%); cursor:pointer;" width="18" height="18" fill="none"
             stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24">
@@ -175,15 +173,13 @@
       </div>
       <div class="col-md-5">
         <label for="endDate" class="form-label">To Date</label>
-
-        <!-- wrapper so the entire area—including the icon— is clickable -->
         <div class="input-with-icon position-relative">
 
-          <!-- the date input -->
+
           <input type="date" id="endDate" class="form-control pe-5" [(ngModel)]="endDate" (change)="onDateChange()"
             #endDateInput (click)="openDatePicker(endDateInput)" />
 
-          <!-- calendar icon -->
+
           <svg class="calendar-icon position-absolute"
             style="right:10px; top:50%; transform:translateY(-50%); cursor:pointer;" width="18" height="18" fill="none"
             stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"
@@ -197,7 +193,49 @@
       <div class="col-md-2">
         <button class="btn btn-primary btnapply" (click)="applyDateFilter()">Apply</button>
       </div>
-    </div>
+    </div> -->
+ <div class="row g-3 align-items-end mb-3" style="padding-bottom: 30px;">
+  <!-- From Date -->
+  <div class="col-md-6">
+    <mat-form-field appearance="fill" class="w-100">
+      <mat-label>From Date</mat-label>
+      <input
+        matInput
+        [matDatepicker]="fromPicker"
+        [(ngModel)]="startDate"
+        name="startDate"
+        (dateChange)="onDateChange()"
+      />
+      <mat-datepicker-toggle matSuffix [for]="fromPicker"></mat-datepicker-toggle>
+      <mat-datepicker #fromPicker></mat-datepicker>
+    </mat-form-field>
+  </div>
+
+  <!-- To Date -->
+  <div class="col-md-6">
+    <mat-form-field appearance="fill" class="w-100">
+      <mat-label>To Date</mat-label>
+      <input
+        matInput
+        [matDatepicker]="toPicker"
+        [(ngModel)]="endDate"
+        name="endDate"
+        (dateChange)="onDateChange()"
+      />
+      <mat-datepicker-toggle matSuffix [for]="toPicker"></mat-datepicker-toggle>
+      <mat-datepicker #toPicker></mat-datepicker>
+    </mat-form-field>
+  </div>
+
+  <!-- Apply Button
+  <div class="col-md-2">
+    <button class="btn btn-primary btnapply w-100" (click)="applyDateFilter()">
+      Apply
+    </button>
+  </div> -->
+</div>
+
+
     <!-- Sent Messages Card -->
     <div *ngIf="!loading && !error" class="dashboard-metrics">
       <div class="metric-card sent-messages-card" (click)="goToLogs('sent')">

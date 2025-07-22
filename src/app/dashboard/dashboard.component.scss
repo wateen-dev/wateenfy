@@ -564,3 +564,26 @@ h1{
     opacity: 0.6;
   }
 }
+.mat-mdc-form-field {
+  --mat-mdc-form-field-floating-label-scale: 0.75;
+  display: inline-flex;
+  flex-direction: column;
+  width: 100%; /* <-- minimum width set here */
+  text-align: left;
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-font-smoothing: antialiased;
+  font-family: var(--mat-form-field-container-text-font, var(--mat-app-body-large-font));
+}
+
+.custom-transparent-field .mdc-text-field--filled:not(.mdc-text-field--disabled) {
+  background-color: transparent !important;
+  font-size: 16px !important;
+}
+::ng-deep .mdc-text-field--filled:not(.mdc-text-field--disabled) {
+  background-color: transparent !important;
+}
+::ng-deep .mat-mdc-input-element {
+  font-size: 16px !important;
+  color: #000 !important; /* Optional: ensure readability */
+}
+

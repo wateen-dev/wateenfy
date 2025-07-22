@@ -56,6 +56,7 @@ export class WhatsappSearchMemberComponent implements OnInit {
 
     this.whatsappService.getAllMembers().subscribe({
       next: (res) => {
+        debugger
         this.members = res.data;
         this.onSearch();          // ➜ initialise filter & pagination
         this.isLoading = false;

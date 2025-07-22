@@ -108,6 +108,11 @@
          (click)="$event.stopPropagation()">
         List Groups
       </a>
+       <a class="submenu-item" [routerLink]="isWhatsAppReady() ? ['/whatsapp/member-management'] : null"
+      (click)="onAddMemberClick($event)" [class.disabled]="!isWhatsAppReady()"
+      [title]="!isWhatsAppReady() ? 'WhatsApp must be connected to add members' : ''">
+     Member Management
+    </a>
     <a class="submenu-item" [routerLink]="isWhatsAppReady() ? ['/whatsapp/add-member'] : null"
       (click)="onAddMemberClick($event)" [class.disabled]="!isWhatsAppReady()"
       [title]="!isWhatsAppReady() ? 'WhatsApp must be connected to add members' : ''">
