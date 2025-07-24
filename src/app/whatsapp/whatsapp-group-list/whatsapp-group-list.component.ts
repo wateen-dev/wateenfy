@@ -45,6 +45,8 @@ export class WhatsappGroupListComponent implements OnInit {
   searchTerm: string = '';
   isLoading: boolean = false;
   isDeleteMemberLoading: boolean = false;
+  isAddingMemberLoading: boolean = false;
+  isGroupPopupLoading: boolean = false;
   errorMessage: string = '';
   selectedGroupId: number | null = null;
   showGroupPopup = false;
@@ -57,6 +59,7 @@ export class WhatsappGroupListComponent implements OnInit {
   paginatedGroups: any[] = []; // Displayed on current page
   activeActionMemberId: number | null = null;
   successMessage: string = '';
+  isAddMemberLoading = true;
   constructor(
     private whatsappService: WhatsappService,
     private router: Router
@@ -67,6 +70,10 @@ export class WhatsappGroupListComponent implements OnInit {
 
   }
   openGroupPopup(groupId: number): void {
+      this.filteredMembers =  [];
+      this.paginatedMembers = [];
+      this.members = [];
+    this.isGroupPopupLoading = true;
     this.selectedGroupId = +groupId;
     this.showGroupPopup = true;
     this.memberCurrentPage = 1;
@@ -74,11 +81,13 @@ export class WhatsappGroupListComponent implements OnInit {
       next: (response) => {
         this.members = response.data;
         this.filteredMembers = response.data;
+         this.isGroupPopupLoading = false;
         this.updatePaginatedMembers();
         this.isLoading = false;
       },
       error: (error) => {
         this.isLoading = false;
+         this.isGroupPopupLoading = false;
         this.errorMessage = error.error?.message || 'Failed to load members. Please contact system administrator.';
       }
     });
@@ -112,6 +121,7 @@ export class WhatsappGroupListComponent implements OnInit {
 
     // Call API and refresh list here
   }
+
   closePopup(): void {
     this.showGroupPopup = false;
     this.selectedGroupId = null;
@@ -127,18 +137,37 @@ export class WhatsappGroupListComponent implements OnInit {
     this.currentPage = page;
     this.updatePaginatedGroups();
   }
- retryMember(member: any): void {
-  const payload = {
+ retryAddMember(member: any): void {
+ this.isAddingMemberLoading = true;
+ debugger
+   const payload = {
     group_name: member.group_name,
     members: [
       {
         member_name: member.member_name,
-        phone_number: member.phone_number
+        phone_number: member.member_number
       }
     ]
   };
+    this.whatsappService.retryaddmember(payload).subscribe({
+      next: (response) => {
+        this.successMessage = 'Member Id: '+ member.member_id +' has been added successfully';
 
-  // this.http.post('/api/retry-member', payload).subscribe(...)
+        // Navigate to search member screen after 2 seconds
+        setTimeout(() => {
+          this.isAddingMemberLoading = false;
+          this.closePopup();
+          this.loadGroups();
+        }, 2000);
+      },
+      error: (error) => {
+        this.isAddingMemberLoading = false;
+         this.closePopup();
+        this.errorMessage = error.error?.message || 'Failed to add member! Please contact System Administrator';
+      }
+    });
+    // Optionally close the menu
+    this.activeActionMemberId = null;
 }
 
   // Optional: To get total number of pages

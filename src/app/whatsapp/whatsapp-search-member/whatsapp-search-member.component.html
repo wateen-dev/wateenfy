@@ -24,7 +24,10 @@
     (input)="onSearch()"     
   />
 </div>
-
+  <div class="loading-spinner" *ngIf="isLoading">
+        <div class="spinner"></div>
+        <span>Loading Members...</span>
+      </div>
 <!-- TABLE -->
 <div class="table-container" *ngIf="!isLoading">
   <table class="members-table">
@@ -37,7 +40,7 @@
         <th>Created By</th>
         <th>Status</th>
         <th>Created At</th>
-        <th>Action</th>
+        <!-- <th>Action</th> -->
       </tr>
     </thead>
 
@@ -55,19 +58,19 @@
           </span>
         </td>
         <td>{{ formatDate(m.created_at) }}</td>
-     <td class="position-relative">
-  <!-- 3-dot Action Button -->
-  <button class="actions-button" (click)="toggleActionMenu(m.member_id)">
+   <!--  <td class="position-relative">
+   3-dot Action Button -->
+  <!-- <button class="actions-button" (click)="toggleActionMenu(m.member_id)">
     <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"
       stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24">
       <circle cx="12" cy="12" r="1" />
       <circle cx="12" cy="5" r="1" />
       <circle cx="12" cy="19" r="1" />
     </svg>
-  </button>
+  </button> -->
 
   <!-- Action Menu (shown only if activeActionMemberId matches) -->
-  <div class="action-menu" *ngIf="activeActionMemberId === m.member_id">
+ <!-- <div class="action-menu" *ngIf="activeActionMemberId === m.member_id">
     <button (click)="deleteMember(m.member_id)" class="delete-btn">
       <svg xmlns="http://www.w3.org/2000/svg" class="delete-icon" width="16" height="16" fill="none"
         stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
@@ -93,7 +96,7 @@
       Delete All
     </button>
   </div>
-</td>
+</td>-->
 
       </tr>
 

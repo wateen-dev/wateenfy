@@ -9,6 +9,20 @@ h1{
   font-weight: 400;
   padding-bottom: 20px;
 }
+.page-heading {
+  display: flex;
+  align-items: center;
+  font-size: 28px;
+  font-weight: 500;
+  color: black; /* vibrant golden */
+}
+
+.page-heading mat-icon {
+  color: #010813; /* vibrant blue for icon */
+  padding-right: 30px !important;
+}
+
+
 .sidebar {
   width: 270px;
   background: #fff;
@@ -252,7 +266,7 @@ h1{
 
   &:hover {
     transform: translateY(-2px);
-    box-shadow: 0 4px 24px 0 rgba(0, 0, 0, 0.12);
+    box-shadow: 0 4px 24px 0 rgba(27, 46, 155, 0.32);
     background-color: #eaeaea;
   }
 
@@ -263,7 +277,7 @@ h1{
     left: 0;
     right: 0;
     height: 4px;
-    background: linear-gradient(90deg, #3bbf6c, #2ea55a);
+    background: linear-gradient(90deg, #a82fbb, #2ea55a);
   }
 
   .metric-icon {
@@ -295,8 +309,8 @@ h1{
     }
 
     .metric-label {
-      font-size: 0.95rem;
-      color: #7b8794;
+      font-size: 14px;
+      color: black;
       font-weight: 500;
     }
   }
@@ -360,6 +374,9 @@ h1{
 
   &.active-members-card .metric-icon {
     background: linear-gradient(135deg, #66bb6a 0%, #388e3c 100%);
+  }
+  &.inactive-members-card .metric-icon {
+    background: linear-gradient(135deg, #99a418 0%, #96b714 100%);
   }
 }
 
@@ -586,4 +603,11 @@ h1{
   font-size: 16px !important;
   color: #000 !important; /* Optional: ensure readability */
 }
-
+.custom-btn{
+  background-color:#0b5ed7;
+}
+.custom-btn:hover{
+  background-color:white;
+  border:1px solid #0b5ed7;
+  color:#0b5ed7
+}

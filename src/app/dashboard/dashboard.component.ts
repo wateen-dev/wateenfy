@@ -9,11 +9,14 @@ import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatNativeDateModule, DateAdapter, MAT_DATE_LOCALE, MAT_DATE_FORMATS, NativeDateAdapter } from '@angular/material/core';
+import { WhatsAppStatusService } from '../services/whatsapp-status.service';
+import { MatIconModule } from '@angular/material/icon';
+
 @Component({
   selector: 'app-dashboard',
   standalone: true,
-  imports: [MatFormFieldModule,MatInputModule,SidebarComponent,MatDatepickerModule,RouterModule,MatNativeDateModule,FormsModule,CommonModule
-],
+  imports: [MatFormFieldModule, MatInputModule, SidebarComponent, MatDatepickerModule, RouterModule, MatNativeDateModule, FormsModule, CommonModule,MatIconModule
+  ],
   // providers: [
   //   { provide: DateAdapter, useClass: NativeDateAdapter }, // ✅ Fixes the missing DateAdapter error
   //   { provide: MAT_DATE_LOCALE, useValue: 'en-GB' } // Optional: you can use 'en-US' or others
@@ -28,52 +31,75 @@ export class DashboardComponent implements OnInit {
     registeredGroups: 0,
     sentMessages: 0,
     pendingMessages: 0,
-    totalMembers: 0
+    totalMembers: 0,
+    activeMembers: 0,
+    inactiveMembers: 0,
+    invited: 0,
+    pending: 0
   };
 
   loading = true;
+  loadingNew = true;
   error = '';
+  errorMessage = '';
   startDate: Date = new Date(); // today's date
   endDate: Date = new Date();   // today's date
   selectedDate: string = "";
-
+  sentCount = 0;
+  failedCount = 0;
 
   constructor(
     private router: Router,
     private auth: AuthService,
-    private dashboardService: DashboardService
+    private dashboardService: DashboardService,
+    private whatsAppStatusService: WhatsAppStatusService
   ) { }
 
   ngOnInit() {
-    this.loadDashboardStats();
-  }
-  getTodayDate(): string {
     const today = new Date();
-    return today.toISOString().split('T')[0]; // Format: 'yyyy-MM-dd'
-  }
-  onDateChange(): void {
-    console.log('Start:', this.startDate);
-    console.log('End:', this.endDate);
-  }
-  applyDateFilter(): void {
-    if (!this.startDate || !this.endDate) {
-      alert('Please select both dates.');
-      return;
-    }
-    // Apply filtering logic
-    console.log('Applying date filter from', this.startDate, 'to', this.endDate);
-  }
-  openDatePicker(el: HTMLInputElement): void {
+    const startDate = this.formatDate(today); // use today's date or subtract days if needed
+    const endDate = this.formatDate(today);   // can be same as startDate for single-day stats
+    this.loadDashboardStats();
     debugger
-    // Chrome ≥114, Edge ≥114 support showPicker()
-    // Fallback to .focus() to open the picker on most other desktop browsers
-    if ((el as any).showPicker) {
-      (el as any).showPicker();
-    } else {
-      el.focus();          // Safari / Firefox will show the picker on focus
-      el.click();          // fallback for older Chromium versions
-    }
+    this.GetMessageStats(startDate, endDate);
   }
+  refreshStatusManually(): void {
+  this.whatsAppStatusService.refreshStatus().subscribe({
+    next: (status) => {
+      console.log('Manual refresh status:', status);
+    },
+    error: (err) => {
+      console.error('Manual refresh failed:', err);
+    }
+  });
+}
+
+  formatDate(date: Date): string {
+    const year = date.getFullYear();
+    const month = (date.getMonth() + 1).toString().padStart(2, '0');
+    const day = date.getDate().toString().padStart(2, '0');
+    return `${year}-${month}-${day}`;
+  }
+
+ onDateChange(): void {
+  debugger
+    // this.errorMessage = ''
+  const formattedStartDate = this.formatDate(this.startDate);
+  const formattedEndDate = this.formatDate(this.endDate);
+  if (!this.startDate || !this.endDate) {
+    this.errorMessage = 'Both start and end dates are required.';
+    return;
+  }
+
+  if ( formattedStartDate > formattedEndDate) {
+    this.errorMessage = 'Start date cannot be greater than end date.';
+    return;
+  }
+
+
+  this.GetMessageStats(formattedStartDate, formattedEndDate);
+}
+
   loadDashboardStats() {
     this.loading = true;
     this.error = '';
@@ -89,6 +115,49 @@ export class DashboardComponent implements OnInit {
         console.error('Error loading dashboard stats:', err);
       }
     });
+  }
+  GetMessageStats(startDate: string, endDate: string): void {
+    this.loadingNew = true;
+    this.errorMessage = '';
+
+    this.dashboardService.getMessageStats('sent', startDate, endDate).subscribe({
+      next: (sentRes: any) => {
+        if (sentRes.data.length == 0) {
+          this.dashboardStats.sentMessages = this.sentCount;
+        }
+        else {
+          this.sentCount = sentRes.data.length;
+          this.dashboardStats.sentMessages = this.sentCount
+        }
+        // Now fetch pending messages after sent
+        this.dashboardService.getMessageStats('pending', startDate, endDate).subscribe({
+          next: (pendingRes: any) => {
+            debugger
+            if (pendingRes.data.length == 0) {
+              this.dashboardStats.pendingMessages = this.failedCount;
+            }
+            else {
+              this.failedCount = pendingRes.data.length;
+              this.dashboardStats.pendingMessages = this.failedCount
+            }
+            console.log('Pending Messages:', this.dashboardStats.pendingMessages);
+            this.loadingNew = false;
+          },
+          error: (err) => {
+            this.errorMessage = 'Failed to load pending message stats.';
+            this.loadingNew = false;
+            console.error('Error loading pending stats:', err);
+          }
+        });
+
+      },
+      error: (err) => {
+        this.errorMessage = 'Failed to load sent message stats.';
+        this.loadingNew = false;
+        console.error('Error loading sent stats:', err);
+      }
+    });
+
   }
   goToGroups() {
     this.router.navigate(['/whatsapp/list-groups']);
@@ -117,5 +186,4 @@ export class DashboardComponent implements OnInit {
       this.sidebar.showQRCodePopup();
     }
   }
-
 } 

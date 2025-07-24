@@ -10,10 +10,10 @@ interface CreateGroupWithMembersRequest {
   description: string;
   created_by: string;
   modified_by: string;
-  members: {
-    member_name: string;
-    phone_number: string;
-  }[];
+  // members: {
+  //   member_name: string;
+  //   phone_number: string;
+  // }[];
 }
 interface DeleteMemberRequest {
   member_id: number;
@@ -74,7 +74,7 @@ export interface GroupMemberMapping {
 }
 export interface RemoveGroupMemberMapping {
   member_id: string;
-  type:string;
+  type: string;
 }
 interface MemberGroupsResponse {
   data: Array<Group & { [key: string]: any }>;
@@ -120,8 +120,8 @@ export class WhatsappService {
       subscriber.complete();
     });
   }
-
-  createGroupWithMembers(groupName: string, description: string, members: { member_name: string; phone_number: string }[]): Observable<any> {
+  // createGroupWithMembers(groupName: string, description: string, members: { member_name: string; phone_number: string }[]): Observable<any> {
+  createGroupWithMembers(groupName: string, description: string): Observable<any> {
     return this.checkWhatsAppReady().pipe(
       switchMap(() => {
         const user = this.auth.getUser();
@@ -135,10 +135,10 @@ export class WhatsappService {
           description: description,
           created_by: firstName,
           modified_by: firstName,
-          members: members.map(member => ({
-            member_name: member.member_name,
-            phone_number: member.phone_number
-          }))
+          // members: members.map(member => ({
+          //   member_name: member.member_name,
+          //   phone_number: member.phone_number
+          // }))
         };
 
         const headers = new HttpHeaders({
@@ -168,6 +168,21 @@ export class WhatsappService {
       })
     );
   }
+
+retryaddmember(payload: any): Observable<any> {
+  return this.checkWhatsAppReady().pipe(
+    switchMap(() => {
+      const headers = new HttpHeaders({
+        'Content-Type': 'application/json',
+        'Accept': 'application/json',
+        'Authorization': `Bearer ${this.auth.getToken()}`
+      });
+
+      return this.http.post(`${this.API_URL}/whatsapp/add-group-members`, payload, { headers });
+    })
+  );
+}
+
 
   getGroups(): Observable<GroupsResponse> {
     const headers = new HttpHeaders({
@@ -203,30 +218,30 @@ export class WhatsappService {
 
     return this.http.get<ApiResponse<Member>>(`${this.API_URL}/member/all`, { headers });
   }
-getSelectedGroups(memberId: string): Observable<MemberGroupsResponse> {
-  return this.checkWhatsAppReady().pipe(
-    switchMap(() => {
-      const user = this.auth.getUser();
-      if (!user) {
-        throw new Error('User not logged in');
-      }
+  getSelectedGroups(memberId: string): Observable<MemberGroupsResponse> {
+    return this.checkWhatsAppReady().pipe(
+      switchMap(() => {
+        const user = this.auth.getUser();
+        if (!user) {
+          throw new Error('User not logged in');
+        }
 
-      const headers = new HttpHeaders({
-        'Content-Type': 'application/json',
-        'Accept': 'application/json',
-        'Authorization': `Bearer ${this.auth.getToken()}`
-      });
+        const headers = new HttpHeaders({
+          'Content-Type': 'application/json',
+          'Accept': 'application/json',
+          'Authorization': `Bearer ${this.auth.getToken()}`
+        });
 
-      const body = { member_id: memberId };
+        const body = { member_id: memberId };
 
-      return this.http.post<MemberGroupsResponse>(
-        `${this.API_URL}/member/member_groups`,
-        body,
-        { headers }
-      );
-    })
-  );
-}
+        return this.http.post<MemberGroupsResponse>(
+          `${this.API_URL}/member/member_groups`,
+          body,
+          { headers }
+        );
+      })
+    );
+  }
 
 
   // Method to check if WhatsApp is ready (for UI components)
@@ -336,7 +351,7 @@ getSelectedGroups(memberId: string): Observable<MemberGroupsResponse> {
     );
   }
   removeGroupMemberQueue(mapping: GroupMemberMapping): Observable<any> {
-   return this.checkWhatsAppReady().pipe(
+    return this.checkWhatsAppReady().pipe(
       switchMap(() => {
         const user = this.auth.getUser();
         if (!user) {

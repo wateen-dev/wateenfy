@@ -44,6 +44,7 @@ export class SidebarComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit() {
+    debugger
     this.user = this.auth.getUser();
     
     this.router.events.pipe(
