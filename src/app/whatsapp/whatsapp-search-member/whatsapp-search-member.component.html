@@ -29,6 +29,12 @@
         <span>Loading Members...</span>
       </div>
 <!-- TABLE -->
+<div class="export-btn-container" *ngIf="!isLoading && filteredMembers.length > 0">
+  <button mat-raised-button color="primary" (click)="exportToExcel()">
+    Download
+  </button>
+</div>
+
 <div class="table-container" *ngIf="!isLoading">
   <table class="members-table">
     <thead>

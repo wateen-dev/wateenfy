@@ -4,6 +4,8 @@ import { Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { SidebarComponent } from '../../shared/sidebar/sidebar.component';
 import { WhatsappService } from '../whatsapp.service';
+import * as XLSX from 'xlsx';
+import FileSaver from 'file-saver';
 
 interface Group {
   group_id: string;
@@ -70,9 +72,9 @@ export class WhatsappGroupListComponent implements OnInit {
 
   }
   openGroupPopup(groupId: number): void {
-      this.filteredMembers =  [];
-      this.paginatedMembers = [];
-      this.members = [];
+    this.filteredMembers = [];
+    this.paginatedMembers = [];
+    this.members = [];
     this.isGroupPopupLoading = true;
     this.selectedGroupId = +groupId;
     this.showGroupPopup = true;
@@ -81,13 +83,13 @@ export class WhatsappGroupListComponent implements OnInit {
       next: (response) => {
         this.members = response.data;
         this.filteredMembers = response.data;
-         this.isGroupPopupLoading = false;
+        this.isGroupPopupLoading = false;
         this.updatePaginatedMembers();
         this.isLoading = false;
       },
       error: (error) => {
         this.isLoading = false;
-         this.isGroupPopupLoading = false;
+        this.isGroupPopupLoading = false;
         this.errorMessage = error.error?.message || 'Failed to load members. Please contact system administrator.';
       }
     });
@@ -112,7 +114,7 @@ export class WhatsappGroupListComponent implements OnInit {
       },
       error: (error) => {
         this.isDeleteMemberLoading = false;
-         this.closePopup();
+        this.closePopup();
         this.errorMessage = error.error?.message || 'Failed to delete member! Please contact System Administrator';
       }
     });
@@ -137,21 +139,21 @@ export class WhatsappGroupListComponent implements OnInit {
     this.currentPage = page;
     this.updatePaginatedGroups();
   }
- retryAddMember(member: any): void {
- this.isAddingMemberLoading = true;
- debugger
-   const payload = {
-    group_name: member.group_name,
-    members: [
-      {
-        member_name: member.member_name,
-        phone_number: member.member_number
-      }
-    ]
-  };
+  retryAddMember(member: any): void {
+    this.isAddingMemberLoading = true;
+    debugger
+    const payload = {
+      group_name: member.group_name,
+      members: [
+        {
+          member_name: member.member_name,
+          phone_number: member.member_number
+        }
+      ]
+    };
     this.whatsappService.retryaddmember(payload).subscribe({
       next: (response) => {
-        this.successMessage = 'Member Id: '+ member.member_id +' has been added successfully';
+        this.successMessage = 'Member Id: ' + member.member_id + ' has been added successfully';
 
         // Navigate to search member screen after 2 seconds
         setTimeout(() => {
@@ -162,13 +164,13 @@ export class WhatsappGroupListComponent implements OnInit {
       },
       error: (error) => {
         this.isAddingMemberLoading = false;
-         this.closePopup();
+        this.closePopup();
         this.errorMessage = error.error?.message || 'Failed to add member! Please contact System Administrator';
       }
     });
     // Optionally close the menu
     this.activeActionMemberId = null;
-}
+  }
 
   // Optional: To get total number of pages
   get totalPages(): number {
@@ -261,11 +263,108 @@ export class WhatsappGroupListComponent implements OnInit {
       this.activeActionMemberId = null;
     }
   }
-formatStatus(status: string | undefined | null): string {
-  if (!status) return '';
-  const lower = status.toLowerCase();
-  return lower.charAt(0).toUpperCase() + lower.slice(1);
-}
-
+  formatStatus(status: string | undefined | null): string {
+    if (!status) return '';
+    const lower = status.toLowerCase();
+    return lower.charAt(0).toUpperCase() + lower.slice(1);
+  }
+  exportToExcelFilteredGroups(): void {
+    const worksheet: XLSX.WorkSheet = XLSX.utils.json_to_sheet(this.filteredGroups);
+  
+    // 1. Auto-size column widths based on max content length
+    const objectMaxLength: number[] = [];
+    const keys = Object.keys(this.filteredGroups[0] || {});
+  
+    keys.forEach((key, i) => {
+      const maxLength = Math.max(
+        key.length,
+        ...this.filteredGroups.map(obj =>
+          (obj as any)[key] ? (obj as any)[key].toString().length : 0
+        )
+      );
+      objectMaxLength[i] = maxLength;
+    });
+  
+    worksheet['!cols'] = objectMaxLength.map(width => ({ wch: width + 5 }));
+  
+    // 2. Make header row bold
+    const headerRange = XLSX.utils.decode_range(worksheet['!ref'] || '');
+    for (let C = headerRange.s.c; C <= headerRange.e.c; ++C) {
+      const cellAddress = XLSX.utils.encode_cell({ r: 0, c: C });
+      if (!worksheet[cellAddress]) continue;
+      worksheet[cellAddress].s = {
+        font: { bold: true },
+        alignment: { horizontal: 'center' }
+      };
+    }
+  
+    // 3. Freeze the top row
+    worksheet['!freeze'] = { xSplit: 0, ySplit: 1 };
+  
+    // 4. Create workbook and export
+    const workbook: XLSX.WorkBook = {
+      Sheets: { 'Sheet1': worksheet },
+      SheetNames: ['Sheet1']
+    };
+  
+    const excelBuffer: any = XLSX.write(workbook, {
+      bookType: 'xlsx',
+      type: 'array',
+      cellStyles: true
+    });
+  
+    const fileName = 'AllGroups.xlsx';
+    const blob = new Blob([excelBuffer], { type: 'application/octet-stream' });
+    FileSaver.saveAs(blob, fileName);
+  }
+    exportToExcelFilteredMembers(): void {
+    const worksheet: XLSX.WorkSheet = XLSX.utils.json_to_sheet(this.filteredMembers);
+  
+    // 1. Auto-size column widths based on max content length
+    const objectMaxLength: number[] = [];
+    const keys = Object.keys(this.filteredMembers[0] || {});
+  
+    keys.forEach((key, i) => {
+      const maxLength = Math.max(
+        key.length,
+        ...this.filteredMembers.map(obj =>
+          (obj as any)[key] ? (obj as any)[key].toString().length : 0
+        )
+      );
+      objectMaxLength[i] = maxLength;
+    });
+  
+    worksheet['!cols'] = objectMaxLength.map(width => ({ wch: width + 5 }));
+  
+    // 2. Make header row bold
+    const headerRange = XLSX.utils.decode_range(worksheet['!ref'] || '');
+    for (let C = headerRange.s.c; C <= headerRange.e.c; ++C) {
+      const cellAddress = XLSX.utils.encode_cell({ r: 0, c: C });
+      if (!worksheet[cellAddress]) continue;
+      worksheet[cellAddress].s = {
+        font: { bold: true },
+        alignment: { horizontal: 'center' }
+      };
+    }
+  
+    // 3. Freeze the top row
+    worksheet['!freeze'] = { xSplit: 0, ySplit: 1 };
+  
+    // 4. Create workbook and export
+    const workbook: XLSX.WorkBook = {
+      Sheets: { 'Sheet1': worksheet },
+      SheetNames: ['Sheet1']
+    };
+  
+    const excelBuffer: any = XLSX.write(workbook, {
+      bookType: 'xlsx',
+      type: 'array',
+      cellStyles: true
+    });
+  
+    const fileName = 'Group-'+this.selectedGroupId+'-MembersDetails.xlsx';
+    const blob = new Blob([excelBuffer], { type: 'application/octet-stream' });
+    FileSaver.saveAs(blob, fileName);
+  }
 }
 

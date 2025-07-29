@@ -389,3 +389,26 @@
   cursor: not-allowed;
   opacity: 0.5;
 }
+
+button[mat-raised-button] {
+  background-color: #073360; /* Vibrant blue */
+  color: white;
+  padding: 8px 12px;
+  border-radius: 8px;
+  box-shadow: 0 4px 10px rgba(25, 118, 210, 0.5);
+  transition: background-color 0.3s ease;
+  border-color: 1px solid #073360;
+  position: relative;
+  top:-2px
+}
+
+button[mat-raised-button]:hover {
+    background-color: white;
+    color: #073360;
+
+}
+.export-btn-container {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 16px;
+}

@@ -39,9 +39,11 @@
 
 
                                 <mat-option class="search-option">
-                                    <input matInput placeholder="Search member..." [(ngModel)]="memberSearch"
+                                     <div class="search-input-container">
+                                    <input matInput placeholder="Search member..." [(ngModel)]="memberSearch" style="min-width: 100%;"
                                         name="memberSearch" (input)="filterMembers()" (click)="$event.stopPropagation()"
                                         class="search-input" />
+                                        </div>
                                 </mat-option>
 
 

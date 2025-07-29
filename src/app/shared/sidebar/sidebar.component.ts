@@ -161,4 +161,7 @@ onAddMemberClick(event: MouseEvent): void {
       this.qrPopup.hidePopup();
     }
   }
+  routeTODashboard(){
+        this.router.navigate(['/dashboard']);
+  }
 }

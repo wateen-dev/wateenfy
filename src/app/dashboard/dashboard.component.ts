@@ -165,7 +165,7 @@ export class DashboardComponent implements OnInit {
   // goToLogs() {
   //   this.router.navigate(['/logs']);
   // }
-  goToLogs(tab: 'sent' | 'received' | 'failed' = 'sent'): void {
+  goToLogs(tab: 'sent' | 'received' | 'pending' = 'sent'): void {
     this.router.navigate(
       ['/logs'],
       { queryParams: { tab } }        // ⬅️  passes “sent”, “received”, …

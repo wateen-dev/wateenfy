@@ -4,7 +4,8 @@ import { SidebarComponent } from '../../shared/sidebar/sidebar.component';
 import { MessageLogsService, MessageLog, MessageLogsResponse } from './message-logs.service';
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
-
+import * as XLSX from 'xlsx';
+import FileSaver from 'file-saver';
 @Component({
   selector: 'app-message-logs',
   standalone: true,
@@ -220,5 +221,53 @@ updatePaginatedLogs() {
   const end = start + this.logItemsPerPage;
   this.paginatedLogs = this.filteredLogs.slice(start, end);
 }
+  exportToExcel(): void {
+    const worksheet: XLSX.WorkSheet = XLSX.utils.json_to_sheet(this.filteredLogs);
   
+    // 1. Auto-size column widths based on max content length
+    const objectMaxLength: number[] = [];
+    const keys = Object.keys(this.filteredLogs[0] || {});
+  
+    keys.forEach((key, i) => {
+      const maxLength = Math.max(
+        key.length,
+        ...this.filteredLogs.map(obj =>
+          (obj as any)[key] ? (obj as any)[key].toString().length : 0
+        )
+      );
+      objectMaxLength[i] = maxLength;
+    });
+  
+    worksheet['!cols'] = objectMaxLength.map(width => ({ wch: width + 5 }));
+  
+    // 2. Make header row bold
+    const headerRange = XLSX.utils.decode_range(worksheet['!ref'] || '');
+    for (let C = headerRange.s.c; C <= headerRange.e.c; ++C) {
+      const cellAddress = XLSX.utils.encode_cell({ r: 0, c: C });
+      if (!worksheet[cellAddress]) continue;
+      worksheet[cellAddress].s = {
+        font: { bold: true },
+        alignment: { horizontal: 'center' }
+      };
+    }
+  
+    // 3. Freeze the top row
+    worksheet['!freeze'] = { xSplit: 0, ySplit: 1 };
+  
+    // 4. Create workbook and export
+    const workbook: XLSX.WorkBook = {
+      Sheets: { 'Sheet1': worksheet },
+      SheetNames: ['Sheet1']
+    };
+  
+    const excelBuffer: any = XLSX.write(workbook, {
+      bookType: 'xlsx',
+      type: 'array',
+      cellStyles: true
+    });
+  
+    const fileName = 'MessageLogs.xlsx';
+    const blob = new Blob([excelBuffer], { type: 'application/octet-stream' });
+    FileSaver.saveAs(blob, fileName);
+  }
 }
