@@ -38,9 +38,11 @@
               }
             ],
             "styles": [
+              "src/custom-theme.scss",
               "src/styles.css"
             ],
             "scripts": [],
+            "allowedCommonJsDependencies": ["file-saver"],
             "server": "src/main.server.ts",
             "prerender": true,
             "ssr": {
@@ -52,13 +54,13 @@
               "budgets": [
                 {
                   "type": "initial",
-                  "maximumWarning": "1MB",
+                  "maximumWarning": "1.5MB",
                   "maximumError": "2MB"
                 },
                 {
                   "type": "anyComponentStyle",
-                  "maximumWarning": "10kB",
-                  "maximumError": "12kB"
+                  "maximumWarning": "12kB",
+                  "maximumError": "15kB"
                 }
               ],
               "outputHashing": "all"
