@@ -112,6 +112,7 @@ export class MemberManagementComponent implements OnInit {
     // you can still access name with picked.member_name when needed
   }
 LoadSelectedGroupsIfAny(memberId: any): void {
+
   if (!memberId) { this.selectedGroups = []; return; }
 
   this.isLoading = true;
@@ -137,6 +138,7 @@ LoadSelectedGroupsIfAny(memberId: any): void {
   });
 }
   filterMembers() {
+    debugger
     const term = this.memberSearch?.toLowerCase() ?? '';
     this.filteredMembers = this.members.filter(member =>
       member.member_name.toLowerCase().includes(term)

@@ -221,11 +221,20 @@
         }
       }
     }
+    &.compose-menu {
+      justify-content: space-between;
+      .chevron {
+        margin-left: auto;
+        transition: transform 0.2s;
+        &.open {
+          transform: rotate(180deg);
+        }
+      }
+    }
   }
   .submenu {
     display: flex;
     flex-direction: column;
-    margin-left: 2.5rem;
     margin-top: 0.2rem;
     gap: 0.2rem;
     .submenu-item {
@@ -278,4 +287,29 @@
     max-width: 100%;
     height: auto;
   }
+}
+.menu-item svg.chevron {
+  margin-left: auto;
+}
+.submenu {
+  display: flex;
+  flex-direction: column;
+  padding-left: 2.5rem; // indent
+  .submenu-item {
+    padding: 0.5rem 0;
+    color: #444;
+    text-decoration: none;
+    font-size: 13px;
+    transition: color 0.2s;
+
+    &.active,
+    &:hover {
+      color: #3bbf6c;
+      font-weight: 500;
+    }
+  }
+}
+.submenu-item.active {
+  background-color: #ccf5e4;
+  color: black !important;
 }

@@ -35,7 +35,7 @@
                     <ng-container>
                         <mat-form-field appearance="fill" class="custom-mat-field w-100">
                             <mat-label>Select Member</mat-label>
-                            <mat-select  [(ngModel)]="memberSearch" [disabled]="isLoading" disableOptionCentering (click)="$event.stopPropagation()"   (selectionChange)="onMemberSelect($event)">
+                            <mat-select  [(ngModel)]="selectedMember" [disabled]="isLoading" disableOptionCentering (click)="$event.stopPropagation()"   (selectionChange)="onMemberSelect($event)">
 
 
                                 <mat-option class="search-option">
