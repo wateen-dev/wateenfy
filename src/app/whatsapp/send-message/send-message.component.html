@@ -1,4 +1,89 @@
+
 <div class="whatsapp-add-member-layout">
     <!-- Sidebar -->
     <app-sidebar></app-sidebar>
-</div>
+    <div class="main-content">
+        <div class="add-member-page">
+            <div class="page-header">
+                <div class="breadcrumb">
+                    <span>Dashboard</span>
+                    <span class="breadcrumb-sep">•</span>
+                    <span>Compose</span>
+                    <span class="breadcrumb-sep">•</span>
+                    <span class="breadcrumb-current">Send Message</span>
+                </div>
+                <h1>Send Message to a Group</h1>
+            </div>
+
+            <div class="form-card">
+                <!-- <div class="member-alert">
+                    <strong>Note: </strong>
+                    In case of member not being added/removed or any issue occurs, you can manually add/remove the
+                    member by using your
+                    phone.
+                </div> -->
+                <form (ngSubmit)="onSubmit()">
+                
+                    <!-- <ng-container>
+                        <mat-form-field appearance="fill" class="custom-mat-field w-100">
+                            <mat-label>Select Member</mat-label>
+                            <mat-select  [(ngModel)]="selectedMember" [disabled]="isLoading" disableOptionCentering (click)="$event.stopPropagation()"   (selectionChange)="onMemberSelect($event)">
+
+
+                                <mat-option class="search-option">
+                                     <div class="search-input-container">
+                                    <input matInput placeholder="Search member..." [(ngModel)]="memberSearch" style="min-width: 100%;"
+                                        name="memberSearch" (input)="filterMembers()" (click)="$event.stopPropagation()"
+                                        class="search-input" />
+                                        </div>
+                                </mat-option>
+
+
+                                <mat-option *ngFor="let member of filteredMembers" [value]="member">
+                                    {{ member.member_name }}
+                                </mat-option>
+
+                            </mat-select>
+                        </mat-form-field>
+                    </ng-container> -->
+
+                    <div class="form-group multi-select-dropdown" #dropdown>
+                        <label>Select Groups</label>
+                        <div class="dropdown-wrapper" (click)="toggleDropdown()">
+                            <div class="dropdown-display">
+                                {{ selectedGroupNames }}
+                                <span class="arrow">&#9662;</span>
+                            </div>
+                            <div class="dropdown-options" *ngIf="dropdownOpen">
+                                <label style="font-weight: 500;" *ngFor="let group of groups" class="dropdown-option"
+                                    (click)="$event.stopPropagation()">
+                                    <input style="position: relative;top:2px;" type="checkbox"
+                                        [checked]="isSelected(group)" (change)="onGroupToggle(group)"
+                                        [disabled]="isLoading" />
+                                    {{ group.group_name }}
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <mat-form-field appearance="fill" class="custom-textarea-field">
+                        <mat-label>Enter your message</mat-label>
+                        <textarea matInput [(ngModel)]="message" name="message" placeholder="Type your message here..." rows="5">
+                      </textarea>
+                    </mat-form-field>
+                    <div class="error-message" *ngIf="errorMessage">
+                        {{ errorMessage }}
+                    </div>
+
+                    <div class="success-message" *ngIf="successMessage">
+                        {{ successMessage }}
+                    </div>
+                    <div class="form-actions">
+                        <button type="submit" class="submit-btn" [disabled]="isAdding">
+                            {{ isAdding ? 'Sending Message...' : 'Send Message' }}
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>

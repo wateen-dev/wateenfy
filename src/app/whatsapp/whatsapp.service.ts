@@ -396,4 +396,30 @@ retryaddmember(payload: any): Observable<any> {
       })
     );
   }
+  sendMessageToGroups(payload: { number: string[]; message: string; isGroup: boolean; type: string }): Observable<any> {
+  return this.checkWhatsAppReady().pipe(
+    switchMap(() => {
+      const user = this.auth.getUser();
+      if (!user) {
+        throw new Error('User not logged in');
+      }
+
+      const headers = new HttpHeaders({
+        'Content-Type': 'application/json',
+        'Accept': 'application/json',
+        'Authorization': `Bearer ${this.auth.getToken()}`
+      });
+
+      const request = {
+        number: payload.number,
+        message: payload.message,
+        isGroup: payload.isGroup,
+        type: payload.type
+      };
+
+      return this.http.post(`${this.API_URL}/message/send/text`, request, { headers });
+    })
+  );
+}
+
 } 
