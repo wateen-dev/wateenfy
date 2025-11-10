@@ -52,11 +52,11 @@ export class WhatsappGroupListComponent implements OnInit {
   errorMessage: string = '';
   selectedGroupId: number | null = null;
   showGroupPopup = false;
-  memberPageSize = 2;
+  memberPageSize = 10;
   memberCurrentPage = 1;
   paginatedMembers: any[] = []; // Current page
   memberSearchTerm: string = '';
-  pageSize = 4; // You can change to 10, 20, etc.
+  pageSize = 10; // You can change to 10, 20, etc.
   currentPage = 1;
   paginatedGroups: any[] = []; // Displayed on current page
   activeActionMemberId: number | null = null;

@@ -42,7 +42,7 @@ export class WhatsappSearchMemberComponent implements OnInit {
   filteredMembers: Member[] = []; // after search
   paginatedMembers: Member[] = []; // current page slice
 
-  pageSize = 5;
+  pageSize = 20;
   currentPage = 1;
   totalPages = 1;
 

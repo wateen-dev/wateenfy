@@ -256,11 +256,6 @@ table {
   color: #000;
 }
 
-.modal-body {
-  padding: 10px 0;
-  font-size: 16px;
-  color: #333;
-}
 
 .modal-footer {
   display: flex;
@@ -520,4 +515,16 @@ button[mat-raised-button]:hover {
     background-color: white;
     color: #073360;
 
+}
+
+// .modal-body {
+//   padding: 10px 0;
+
+// }
+.modal-body {
+  font-size: 16px;
+  color: #333;
+  max-height: 60vh; /* Control how much area the table can take */
+  overflow-y: auto; /* Enable vertical scrolling */
+  padding: 10px;
 }

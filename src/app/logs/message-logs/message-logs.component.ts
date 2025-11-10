@@ -21,7 +21,7 @@ export class MessageLogsComponent implements OnInit {
   // Pagination
  // Pagination for message logs
 logCurrentPage: number = 1;
-logItemsPerPage: number = 5;
+logItemsPerPage: number = 35;
 paginatedLogs: MessageLog[] = [];
 
   // Filter properties

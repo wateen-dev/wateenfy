@@ -15,6 +15,7 @@ export class AuthService {
   // private readonly API_URL = 'https://172.26.52.46/watify/api';
    private readonly API_URL = 'https://watify.wateen.com/watify/api';
 
+
   constructor(private http: HttpClient) {}
 
   private isLocalStorageAvailable(): boolean {
