@@ -66,7 +66,12 @@
           </div>
           <div class="clear-filter" (click)="clearFilters()">
             <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M3 6h18"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/><line x1="10" y1="11" x2="10" y2="17"/><line x1="14" y1="11" x2="14" y2="17"/></svg>
-            Clear
+            Clear Filter
+          </div>
+          <div class="export-btn-container" *ngIf="!loading && filteredLogs.length > 0">
+            <button mat-raised-button color="primary" (click)="exportToExcel()">
+              Download
+            </button>
           </div>
         </div>
 
@@ -106,7 +111,7 @@
               </tr>
             </thead>
             <tbody>
-              <tr *ngFor="let log of filteredLogs">
+              <tr *ngFor="let log of paginatedLogs">
                 <td>{{ log.message_id }}</td>
                 <td>{{ log.group_name }}</td>
                 <td>{{ log.session_id }}</td>
@@ -123,6 +128,24 @@
               </tr>
             </tbody>
           </table>
+          <div class="pagination-controls" *ngIf="logTotalPages > 1">
+  <button (click)="changeLogPage(logCurrentPage - 1)" [disabled]="logCurrentPage === 1">
+    Previous
+  </button>
+
+  <ng-container *ngFor="let page of [].constructor(logTotalPages); let i = index">
+    <button 
+      (click)="changeLogPage(i + 1)" 
+      [class.active]="logCurrentPage === i + 1">
+      {{ i + 1 }}
+    </button>
+  </ng-container>
+
+  <button (click)="changeLogPage(logCurrentPage + 1)" [disabled]="logCurrentPage === logTotalPages">
+    Next
+  </button>
+</div>
+
         </div>
       </div>
     </div>

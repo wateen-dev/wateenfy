@@ -1,6 +1,4 @@
-body, html {
-  font-family: 'Public Sans', sans-serif;
-}
+
 .message-logs-layout {
   display: flex;
   min-height: 100vh;
@@ -12,7 +10,6 @@ body, html {
   display: flex;
   flex-direction: column;
   padding: 2rem 2.5rem;
-  font-family: 'Public Sans', sans-serif;
 }
 
 .message-logs-page {
@@ -20,14 +17,13 @@ body, html {
 }
 
 .page-header {
-  display: flex;
   justify-content: space-between;
   align-items: center;
   margin-bottom: 2rem;
 
   .breadcrumb {
     color: #7b8794;
-    font-size: 1.05rem;
+    font-size: 12px;
     margin-bottom: 0.5rem;
     display: flex;
     align-items: center;
@@ -35,7 +31,7 @@ body, html {
 
     .breadcrumb-sep {
       color: #b0b0b0;
-      font-size: 1.2rem;
+      font-size: 14px;
     }
 
     .breadcrumb-current {
@@ -45,11 +41,10 @@ body, html {
   }
 
   h1 {
-    font-size: 2rem;
+    font-size: 16px;
     font-weight: 700;
     color: #222c36;
     margin: 0;
-    font-family: 'Public Sans', sans-serif;
   }
 }
 
@@ -76,7 +71,7 @@ body, html {
 
   p {
     color: #666;
-    font-size: 1.1rem;
+    font-size: 14px;
     margin: 0;
   }
 }
@@ -99,7 +94,7 @@ body, html {
 
   p {
     color: #ff4d4f;
-    font-size: 1.1rem;
+    font-size: 14px;
     margin-bottom: 1rem;
     text-align: center;
   }
@@ -110,7 +105,7 @@ body, html {
     border: none;
     padding: 0.75rem 1.5rem;
     border-radius: 8px;
-    font-size: 1rem;
+    font-size: 14px;
     font-weight: 500;
     cursor: pointer;
     transition: background-color 0.2s;
@@ -144,10 +139,10 @@ body, html {
     flex-direction: column;
 
     label {
-      font-size: 0.95rem;
+      font-size: 12px;
       color: #555;
       margin-bottom: 0.5rem;
-      font-weight: 500;
+      font-weight: bold;
     }
 
     .input-with-icon {
@@ -157,7 +152,7 @@ body, html {
         padding: 0.7rem 2.5rem 0.7rem 1rem;
         border: 1px solid #e0e0e0;
         border-radius: 8px;
-        font-size: 1rem;
+        font-size: 14px;
         background: #fff;
         box-sizing: border-box;
         &:focus {
@@ -186,7 +181,7 @@ body, html {
         padding: 0.7rem 2.5rem 0.7rem 1rem;
         border: 1px solid #e0e0e0;
         border-radius: 8px;
-        font-size: 1rem;
+        font-size: 14px;
         background: #fff;
         cursor: pointer;
         outline: none;
@@ -207,18 +202,20 @@ body, html {
       }
     }
 
-    &.search-filter {
-      flex-grow: 1;
-      min-width: 250px; /* Adjust as needed */
-    }
+    // &.search-filter {
+    //   flex-grow: 1;
+    //   min-width: 250px; /* Adjust as needed */
+    // }
   }
 
   .clear-filter {
+    position: relative;
+    top:-2px;
     display: flex;
     align-items: center;
     gap: 0.3rem;
     color: #ff4d4f;
-    font-size: 0.95rem;
+    font-size:14px;
     font-weight: 500;
     cursor: pointer;
     padding: 0.5rem;
@@ -239,19 +236,25 @@ body, html {
   gap: 1.5rem;
   border-bottom: 1px solid #e0e0e0;
   margin-bottom: 1.5rem;
-  font-family: 'Public Sans', sans-serif;
 
+    .status-tab .count {
+        font-size: 16px;
+      }
+  .status-tab .label{
+    color:black !important;
+    font-size: 12px;
+   
+  }
   .status-tab {
     display: flex;
     align-items: center;
     gap: 0.5rem;
     padding: 0.5rem 0;
-    font-size: 1.05rem;
+    font-size: 14px;
     color: #555;
     cursor: pointer;
     border-bottom: 2px solid transparent;
     transition: border-color 0.2s, color 0.2s;
-  font-family: 'Public Sans', sans-serif;
 
     &.active {
       color: #3bbf6c;
@@ -291,12 +294,11 @@ body, html {
       th {
         padding: 0.8rem 1rem;
         text-align: left;
-        font-size: 0.95rem;
+        font-size: 14px;
         color: #555;
         font-weight: 600;
         border-bottom: 1px solid #e0e0e0;
         white-space: nowrap;
-  font-family: 'Public Sans', sans-serif;
         svg {
           width: 14px;
           height: 14px;
@@ -316,7 +318,7 @@ body, html {
         td {
           padding: 1rem;
           border-bottom: 1px solid #e0e0e0;
-          font-size: 0.95rem;
+          font-size: 12px;
           color: #333;
           vertical-align: top;
 
@@ -324,7 +326,7 @@ body, html {
             display: inline-block;
             padding: 0.3rem 0.6rem;
             border-radius: 12px;
-            font-size: 0.85rem;
+            font-size: 10px;
             font-weight: 600;
 
             &.yellow {
@@ -359,4 +361,54 @@ body, html {
     }
   }
 }
+.input-with-icon svg{
+  display: none;
+}
+.pagination-controls {
+  margin-top: 16px;
+  display: flex;
+  gap: 6px;
+  justify-content: end;
+}
 
+.pagination-controls button {
+  padding: 6px 12px;
+  border: 1px solid #ccc;
+  background-color: white;
+  cursor: pointer;
+  border-radius: 4px;
+}
+
+.pagination-controls button.active {
+  background-color: #3f51b5;
+  color: white;
+  font-weight: normal;
+}
+
+.pagination-controls button:disabled {
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+
+button[mat-raised-button] {
+  background-color: #073360; /* Vibrant blue */
+  color: white;
+  padding: 8px 12px;
+  border-radius: 8px;
+  box-shadow: 0 4px 10px rgba(25, 118, 210, 0.5);
+  transition: background-color 0.3s ease;
+  border-color: 1px solid #073360;
+  position: relative;
+  top:-2px
+}
+
+button[mat-raised-button]:hover {
+    background-color: white;
+    color: #073360;
+
+}
+.export-btn-container {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 16px;
+}

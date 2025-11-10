@@ -1,0 +1,108 @@
+<div class="whatsapp-add-member-layout">
+    <!-- Sidebar -->
+    <app-sidebar></app-sidebar>
+    <div class="main-content">
+        <div class="add-member-page">
+            <div class="page-header">
+                <div class="breadcrumb">
+                    <span>Dashboard</span>
+                    <span class="breadcrumb-sep">•</span>
+                    <span>Whatsapp Member</span>
+                    <span class="breadcrumb-sep">•</span>
+                    <span class="breadcrumb-current">Add</span>
+                </div>
+                <h1>Add/Remove members to a group</h1>
+            </div>
+
+            <div class="form-card">
+                <div class="member-alert">
+                    <strong>Note: </strong>
+                    In case of member not being added/removed or any issue occurs, you can manually add/remove the
+                    member by using your
+                    phone.
+                </div>
+                <form (ngSubmit)="onSubmit()">
+                    <!-- <div class="form-group">
+                        <label for="lblMember">Select Member</label>
+                        <select id="memberSelect" [(ngModel)]="selectedMember" name="memberSelect"
+                            [disabled]="isLoading">
+                            <option value="">Select Member</option>
+                            <option *ngFor="let member of members" [ngValue]="member">
+                                {{ member.member_name }}
+                            </option>
+                        </select>
+                    </div> -->
+                    <ng-container>
+                        <mat-form-field appearance="fill" class="custom-mat-field w-100">
+                            <mat-label>Select Member</mat-label>
+                            <mat-select  [(ngModel)]="selectedMember" [disabled]="isLoading" disableOptionCentering (click)="$event.stopPropagation()"   (selectionChange)="onMemberSelect($event)">
+
+
+                                <mat-option class="search-option">
+                                     <div class="search-input-container">
+                                    <input matInput placeholder="Search member..." [(ngModel)]="memberSearch" style="min-width: 100%;"
+                                        name="memberSearch" (input)="filterMembers()" (click)="$event.stopPropagation()"
+                                        class="search-input" />
+                                        </div>
+                                </mat-option>
+
+
+                                <mat-option *ngFor="let member of filteredMembers" [value]="member">
+                                    {{ member.member_name }}
+                                </mat-option>
+
+                            </mat-select>
+                        </mat-form-field>
+                    </ng-container>
+
+                    <div class="form-group multi-select-dropdown" #dropdown>
+                        <label>Select Groups</label>
+                        <div class="dropdown-wrapper" (click)="toggleDropdown()">
+                            <div class="dropdown-display">
+                                {{ selectedGroupNames }}
+                                <span class="arrow">&#9662;</span>
+                            </div>
+                            <div class="dropdown-options" *ngIf="dropdownOpen">
+                                <label style="font-weight: 500;" *ngFor="let group of groups" class="dropdown-option"
+                                    (click)="$event.stopPropagation()">
+                                    <input style="position: relative;top:2px;" type="checkbox"
+                                        [checked]="isSelected(group)" (change)="onGroupToggle(group)"
+                                        [disabled]="isLoading" />
+                                    {{ group.group_name }}
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="error-message" *ngIf="errorMessage">
+                        {{ errorMessage }}
+                    </div>
+
+                    <div class="success-message" *ngIf="successMessage">
+                        {{ successMessage }}
+                    </div>
+                    <div class="form-actions">
+                        <button type="submit" class="submit-btn" [disabled]="isAdding">
+                            {{ isAdding ? 'Adding Member...' : 'Add Member' }}
+                        </button>
+                        <!-- <button type="button" class="remove-btn btn btn-danger" [disabled]="isLoading"
+                            (click)="removeMember()">
+                            {{ isLoading ? 'Removing Member...' : 'Remove Member' }}
+                        </button>
+                        <button type="button" class="remove-btn-all btn btn-warning" [disabled]="isLoading" (click)="removeMember()">
+                            {{ isLoading ? 'Removing Member From Groups...' : 'Remove Member - All Groups' }}
+                        </button> -->
+                        <button type="button" class="remove-btn btn btn-danger" [disabled]="isAdding || isRemoving || isRemovingAll"
+                            (click)="removeMember()">
+                            {{ isRemoving ? 'Removing Member...' : 'Remove Member' }}
+                        </button>
+                        
+                        <!-- Remove Member - All Groups -->
+                        <button type="button" class="remove-btn-all btn btn-warning" [disabled]="isAdding || isRemoving || isRemovingAll"
+                            (click)="removeMemberfromAllGroups()">
+                            {{ isRemovingAll ? 'Removing Member From Groups...' : 'Remove Member - All Groups' }}
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>

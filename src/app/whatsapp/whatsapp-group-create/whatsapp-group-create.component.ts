@@ -49,24 +49,24 @@ export class WhatsappGroupCreateComponent {
     }
 
     // Check if at least one member is provided
-    if (this.members.length === 0) {
-      this.errorMessage = 'Please add at least one member to the group';
-      return false;
-    }
+    // if (this.members.length === 0) {
+    //   this.errorMessage = 'Please add at least one member to the group';
+    //   return false;
+    // }
 
     // Check if all members have both name and number
-    const invalidMembers = this.members.some(member => !member.member_name.trim() || !member.phone_number.trim());
-    if (invalidMembers) {
-      this.errorMessage = 'Please fill in all member details';
-      return false;
-    }
+    // const invalidMembers = this.members.some(member => !member.member_name.trim() || !member.phone_number.trim());
+    // if (invalidMembers) {
+    //   this.errorMessage = 'Please fill in all member details';
+    //   return false;
+    // }
 
     // Validate phone numbers (basic validation)
-    const invalidNumbers = this.members.some(member => !/^\d{10,15}$/.test(member.phone_number.replace(/\D/g, '')));
-    if (invalidNumbers) {
-      this.errorMessage = 'Please enter valid phone numbers';
-      return false;
-    }
+    // const invalidNumbers = this.members.some(member => !/^\d{10,15}$/.test(member.phone_number.replace(/\D/g, '')));
+    // if (invalidNumbers) {
+    //   this.errorMessage = 'Please enter valid phone numbers';
+    //   return false;
+    // }
 
     return true;
   }
@@ -82,22 +82,23 @@ export class WhatsappGroupCreateComponent {
     this.isLoading = true;
 
     // Create group with members in a single API call
-    this.whatsappService.createGroupWithMembers(this.groupName, this.description, this.members).subscribe({
+        // this.whatsappService.createGroupWithMembers(this.groupName, this.description, this.members).subscribe({
+    this.whatsappService.createGroupWithMembers(this.groupName, this.description).subscribe({
       next: (response) => {
         this.isLoading = false;
-        this.successMessage = 'Group created and members added successfully! Redirecting to search member screen...';
+        this.successMessage = 'Group created successfully!';
         // Reset form
         this.groupName = '';
         this.description = '';
-        this.members = [{ member_name: '', phone_number: '' }];
+        // this.members = [{ member_name: '', phone_number: '' }];
         // Navigate to search member screen after 2 seconds
-        setTimeout(() => {
-          this.router.navigate(['/whatsapp/search-member']);
-        }, 2000);
+        // setTimeout(() => {
+        //   this.router.navigate(['/whatsapp/search-member']);
+        // }, 2000);
       },
       error: (error) => {
         this.isLoading = false;
-        this.errorMessage = error.error?.message || 'Failed to create group with members. Please try again.';
+        this.errorMessage = error.error?.message || 'Failed to create group. Please try again.';
       }
     });
   }

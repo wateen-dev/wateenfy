@@ -16,7 +16,7 @@
 }
 
 .page-header {
-  display: flex;
+  
   justify-content: space-between;
   align-items: center;
   margin-bottom: 2rem;
@@ -52,6 +52,7 @@
     font-weight: 500;
     cursor: pointer;
     display: flex;
+    float: right;
     align-items: center;
     gap: 0.5rem;
     transition: background 0.2s;
@@ -99,24 +100,23 @@ table {
     padding: 1rem 1rem;
     border-bottom: 1px solid #eee;
     white-space: nowrap; /* Prevent text wrapping in cells */
+    font-size: 12px;
   }
 
   th {
-    font-weight: 600;
-    color: #666;
-    font-size: 1rem;
+    font-weight: 500;
+    font-size: 14px;
   }
 
   td {
     color: #333;
-    font-size: 0.95rem;
 
     .group-id-badge {
       background: #eafaf2;
       color: #3bbf6c;
       padding: 0.3rem 0.6rem;
       border-radius: 12px;
-      font-size: 0.85rem;
+      font-size: 12px;
       font-weight: 600;
     }
 
@@ -132,14 +132,14 @@ table {
       color: #007bff;
       padding: 0.3rem 0.6rem;
       border-radius: 12px;
-      font-size: 0.85rem;
+      font-size: 12px;
       font-weight: 600;
     }
 
     .status-badge {
       padding: 0.3rem 0.6rem;
       border-radius: 12px;
-      font-size: 0.85rem;
+      font-size: 12px;
       font-weight: 600;
 
       &.active {
@@ -199,10 +199,10 @@ table {
 }
 
 .no-data {
-  text-align: center;
+  text-align: center !important;
   color: #666;
   padding: 2rem !important;
-  font-style: italic;
+  font-weight: bold;
 }
 .modal-overlay {
   position: fixed;
@@ -219,8 +219,8 @@ table {
 
 .modal-container {
   background: #fff;
-  width: 66.66%; /* ~8 out of 12 columns (Bootstrap style) */
-  max-width: 800px;
+  width: 80.66%; /* ~8 out of 12 columns (Bootstrap style) */
+  // max-width: 800px;
   border-radius: 12px;
   padding: 24px;
   box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
@@ -229,7 +229,7 @@ table {
 
 .modal-header {
   display: flex;
-  justify-content: space-between;
+  justify-content: left;
   align-items: center;
   border-bottom: 1px solid #eee;
   margin-bottom: 16px;
@@ -241,6 +241,10 @@ table {
 }
 
 .close-btn {
+  position: absolute;
+  right: 20px;
+  top:27px;
+  float: inline-end;
   background: transparent;
   border: none;
   font-size: 28px;
@@ -252,11 +256,6 @@ table {
   color: #000;
 }
 
-.modal-body {
-  padding: 10px 0;
-  font-size: 16px;
-  color: #333;
-}
 
 .modal-footer {
   display: flex;
@@ -280,8 +279,8 @@ table {
   background-color: #3f51b5;      /* Indigo base color */
   color: #fff;
   border: none;
-  padding: 6px 16px;
-  font-size: 14px;
+  padding: 3px 10px;
+  font-size: 12px;
   border-radius: 6px;
   cursor: pointer;
   transition: background-color 0.3s ease, transform 0.2s ease;
@@ -291,7 +290,9 @@ table {
 }
 
 .view-members-btn:hover {
-  background-color: #303f9f;
+  background-color: white;
+  border:2px solid #3f51b5;
+  color:#3f51b5;
   transform: translateY(-1px);
 }
 
@@ -302,10 +303,228 @@ table {
 
 .view-members-btn:focus {
   outline: none;
-  box-shadow: 0 0 0 3px rgba(63, 81, 181, 0.3);
+  box-shadow: 0 0 0 3px rgba(73, 87, 168, 0.3);
+}
+.pagination-controls {
+  margin-top: 16px;
+  display: flex;
+  gap: 6px;
+  justify-content: end;
 }
 
-html {
-  zoom: 90%;
+.pagination-controls button {
+  padding: 6px 12px;
+  border: 1px solid #ccc;
+  background-color: white;
+  cursor: pointer;
+  border-radius: 4px;
 }
 
+.pagination-controls button.active {
+  background-color: #3f51b5;
+  color: white;
+  font-weight: normal;
+}
+
+.pagination-controls button:disabled {
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+
+.actions-button {
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 4px;
+}
+
+// .action-menu {
+//   padding: 8px;
+//   border-radius: 4px;
+//   min-width: 100px;
+// }
+
+// .delete-btn {
+//   background-color: transparent;
+//   border: none;
+//   color: red;
+//   cursor: pointer;
+//   padding: 6px 12px;
+//   width: 100%;
+//   text-align: left;
+// }
+.action-menu {
+  position: absolute;
+  right: 0;
+
+  background-color: #fff;
+  border: 1px solid #e0e0e0;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
+  padding: 8px 0;
+  min-width: 120px;
+  z-index: 1000;
+  animation: fadeIn 0.2s ease-in-out;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(-4px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.delete-btn {
+  background-color: transparent;
+  border: none;
+  width: 100%;
+  padding: 8px 16px;
+  text-align: left;
+  color: #d32f2f;
+  font-weight: 500;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  transition: background 0.2s ease-in-out;
+}
+
+.delete-btn:hover {
+  background-color: #fbe9e7;
+}
+
+.delete-icon {
+  stroke: #d32f2f;
+}
+// Messages
+.error-message {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: #dc2626;
+  font-size: 12px;
+  padding: 1rem;
+  background: #fee2e2;
+  border-radius: 8px;
+  border: 1px solid #fecaca;
+
+  svg {
+    flex-shrink: 0;
+  }
+}
+
+.success-message {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: #16a34a;
+  font-size: 12px;
+  padding: 1rem;
+  background: #f0fff4;
+  border-radius: 8px;
+  border: 1px solid #d4edda;
+
+  svg {
+    flex-shrink: 0;
+  }
+}
+/* Spinner container (optional, center align etc.) */
+.loading-spinner {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
+  color: #333;
+}
+
+/* The spinning SVG */
+.spinner-icon {
+  animation: spin 1s linear infinite;
+  stroke: #007bff; /* Blue, matches Material primary */
+}
+
+/* Spinner keyframes */
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+.status-badge {
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-weight: bold;
+  text-transform: capitalize;
+  color: white;
+}
+
+.status-active {
+  background-color: #eafaf2;
+  color:green;
+}
+
+.status-pending {
+  background-color: #eafaf2;
+  color: blue;
+}
+
+.status-invited {
+  background-color: #eafaf2;
+  color: goldenrod;
+}
+
+.status-deleted {
+  background-color: #eafaf2;
+  color: red;
+}
+
+.retry-btn {
+  display: block;
+  margin-top: 8px;
+  padding: 6px 12px;
+  background-color: white;
+  color: #e68900;
+  border: none;
+  border-radius: 4px;
+  font-size: 13px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.retry-btn:hover {
+  background-color: #fbe9e7;
+}
+.export-btn-container {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 16px;
+  padding-bottom: 20px;
+}
+.export-btnmembers-container{
+    display: flex;
+  justify-content: flex-end;
+}
+
+button[mat-raised-button] {
+  background-color: #073360; /* Vibrant blue */
+  color: white;
+  padding: 8px 12px;
+  border-radius: 8px;
+  box-shadow: 0 4px 10px rgba(25, 118, 210, 0.5);
+  transition: background-color 0.3s ease;
+  border-color: 1px solid #073360;
+}
+
+button[mat-raised-button]:hover {
+    background-color: white;
+    color: #073360;
+
+}
+
+// .modal-body {
+//   padding: 10px 0;
+
+// }
+.modal-body {
+  font-size: 16px;
+  color: #333;
+  max-height: 60vh; /* Control how much area the table can take */
+  overflow-y: auto; /* Enable vertical scrolling */
+  padding: 10px;
+}

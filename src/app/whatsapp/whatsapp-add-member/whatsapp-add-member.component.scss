@@ -16,7 +16,6 @@
 }
 
 .page-header {
-  display: flex;
   justify-content: space-between;
   align-items: center;
   margin-bottom: 2rem;
@@ -95,12 +94,13 @@ select {
 }
 
 .add-member-area {
-  display: flex;
   flex-direction: column;
   gap: 1rem;
 }
 
 .add-member-button {
+      position: relative;
+    bottom: 20px;
   background: #16a34a;
   color: #fff;
   border: none;
@@ -112,6 +112,7 @@ select {
   display: flex;
   align-items: center;
   gap: 0.5rem;
+  float: right;
   transition: background 0.2s;
   max-width: fit-content;
   &:hover {
@@ -159,6 +160,8 @@ select {
     display: flex;
     align-items: center;
     gap: 0.3rem;
+    position: relative;
+    top:35px;
     transition: background 0.2s;
     svg {
       width: 18px;
@@ -194,7 +197,7 @@ select {
 
 .error-message {
   color: #dc2626;
-  font-size: 0.95rem;
+  font-size: 14px;
   margin-top: 1rem;
   padding: 0.75rem;
   background: #fee2e2;
@@ -211,3 +214,14 @@ select {
   border-radius: 8px;
   border: 1px solid #a7f3d0;
 }
+.member-alert {
+  // background-color: #ffcdcd;
+  color: #9e0e1c;
+  padding: 16px;
+  border: 1px solid #ffeeba;
+  border-radius: 6px;
+  font-size: 14px;
+  margin: 20px 0;
+  font-family: 'Public Sans', sans-serif;
+}
+

@@ -6,6 +6,8 @@ import { QRCodePopupComponent } from '../qr-code-popup/qr-code-popup.component';
 import { WhatsAppStatusService, WhatsAppStatus } from '../../services/whatsapp-status.service';
 import { filter } from 'rxjs/operators';
 import { Subscription } from 'rxjs';
+import { RouterModule } from '@angular/router';
+
 
 interface User {
   id: string;
@@ -22,12 +24,13 @@ interface User {
 @Component({
   selector: 'app-sidebar',
   standalone: true,
-  imports: [CommonModule, RouterLink, QRCodePopupComponent],
+  imports: [CommonModule, RouterLink, QRCodePopupComponent,RouterModule],
   templateUrl: './sidebar.component.html',
   styleUrl: './sidebar.component.scss'
 })
 export class SidebarComponent implements OnInit, OnDestroy {
   whatsappMenuOpen = false;
+  composeMenuOpen = false;
   user: User | null = null;
   whatsappStatus: WhatsAppStatus | null = null;
   isPolling: boolean = false;
@@ -44,14 +47,23 @@ export class SidebarComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit() {
+    debugger
     this.user = this.auth.getUser();
     
     this.router.events.pipe(
       filter(event => event instanceof NavigationEnd)
     ).subscribe((event: NavigationEnd) => {
       this.whatsappMenuOpen = event.urlAfterRedirects.startsWith('/whatsapp');
+      this.composeMenuOpen = event.urlAfterRedirects === '/whatsapp/send-message';
     });
-
+  // 👇 Add this line to cover initial load without navigation
+  this.whatsappMenuOpen = this.router.url.startsWith('/whatsapp');
+    // Open Compose Message tab if exact URL matches
+     const currentUrl = this.router.url;
+     this.composeMenuOpen = currentUrl === '/whatsapp/send-message';
+     if(this.composeMenuOpen){
+      this.whatsappMenuOpen = false;
+     }
     // Subscribe to WhatsApp status updates
     this.statusSubscription = this.statusService.status$.subscribe(
       status => {
@@ -66,6 +78,20 @@ export class SidebarComponent implements OnInit, OnDestroy {
       this.statusService.startBackgroundPolling();
     }
   }
+onCreateGroupClick(event: MouseEvent): void {
+  if (!this.isWhatsAppReady()) {
+    event.preventDefault(); // Prevent default anchor behavior
+    event.stopPropagation(); // Prevent event bubbling
+    // Optional: show toast/snackbar
+  }
+}
+onAddMemberClick(event: MouseEvent): void {
+  if (!this.isWhatsAppReady()) {
+    event.preventDefault();
+    event.stopPropagation();
+    // Optional: show notification or toast
+  }
+}
 
   ngOnDestroy() {
     if (this.statusSubscription) {
@@ -75,6 +101,12 @@ export class SidebarComponent implements OnInit, OnDestroy {
 
   toggleWhatsappMenu(event: Event) {
     this.whatsappMenuOpen = !this.whatsappMenuOpen;
+    this.composeMenuOpen = false; // close the other menu
+  }
+  toggleComposeMenu(event: Event) {
+    event.stopPropagation();
+    this.composeMenuOpen = !this.composeMenuOpen;
+    this.whatsappMenuOpen = false; // close the other menu
   }
 
   getInitials(): string {
@@ -118,7 +150,21 @@ export class SidebarComponent implements OnInit, OnDestroy {
     if (!this.whatsappStatus) return 'status-checking';
     return this.whatsappStatus.isReady ? 'status-ready' : 'status-waiting';
   }
-
+  onSendMessageClick(event: Event) {
+    if (!this.isWhatsAppReady()) {
+    this.composeMenuOpen = false;
+    event.preventDefault();
+    event.stopPropagation();
+    // Optional: show notification or toast
+  }
+}
+  isWhatsAppTabActive(): boolean {
+      const url = this.router.url;
+  return url.startsWith('/whatsapp') && !url.includes('/send-message');
+  }
+   isWhatsAppSendMessageTabActive(): boolean {
+  return this.router.url === '/whatsapp/send-message';
+  }
   getLastCheckedText(): string {
     if (!this.whatsappStatus?.lastChecked) return '';
     const now = new Date();
@@ -145,5 +191,8 @@ export class SidebarComponent implements OnInit, OnDestroy {
     if (this.qrPopup) {
       this.qrPopup.hidePopup();
     }
+  }
+  routeTODashboard(){
+        this.router.navigate(['/dashboard']);
   }
 }
